@@ -1,14 +1,16 @@
 package sort;
+import java.awt.FlowLayout;
+import java.awt.event.*;
 import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+
+import javax.swing.*;
+
 
 
 public class choose
 {
 	static JTextArea ta; // Text area
+	static JButton btnQuit;
 	public static long getDirSize(File dir) {
 		
 		long size = 0;
@@ -64,6 +66,7 @@ public class choose
 
    	 
         JFrame frame = new JFrame("Ordnersort"); //Frame für Text Area
+        frame.getContentPane().setLayout(new FlowLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Default Bedeutung "X"
         
     	 ta = new JTextArea("", 5, 50); //Text Area generieren
@@ -93,8 +96,22 @@ public class choose
 	        ta.append("------------------------------------------------------------------------------ \n");
 	        analyse(f1);	//analyse funktion
         }
+        // Create Quit Button
+        	  btnQuit = new JButton("Quit");
+        	  btnQuit.addActionListener
+        	  (
+        			  new ActionListener()
+        			  {
+        				  public void actionPerformed(ActionEvent e)
+        				  {
+        					  System.exit(0);         
+        				  }
+        			  }
+        	  );
+        	  
        //Scrollbalken und Textarea in panel
    	 frame.getContentPane().add(sbrText);  
+   	 frame.getContentPane().add(btnQuit);
    	 frame.pack(); // Adjusts frame to size of components
    	 frame.setVisible(true);
     }    
