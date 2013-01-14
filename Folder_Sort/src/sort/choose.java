@@ -2,6 +2,8 @@ package sort;
 import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -9,8 +11,13 @@ import javax.swing.*;
 //Cooperation von Chris und Merlin!!!
 public class choose
 {
+	static FileWriter writer;
 	static JTextArea ta; // Text area
 	static JButton btnQuit;
+	static JButton btnCSV;
+	
+	
+	
 	public static long getDirSize(File dir) {
 		
 		long size = 0;
@@ -28,6 +35,7 @@ public class choose
 		return size;
 	}
 	
+	
 	public static void analyse(File dir) {
 
 		File[] files = dir.listFiles();
@@ -40,26 +48,11 @@ public class choose
 					ta.append(files[i].getName());
 					File m = new File (files[i].getAbsolutePath());
 					ta.append(" " + (getDirSize(m)/1024/1024/1024)+ "GB \n");
-					/*
-					 * if((getDirSize(m)/1024/1024/1024)<=3)
-					
-					{
-						System.out.println("Kleiner als 3 GB");
-					}
-					else if (((getDirSize(m)/1024/1024/1024)>3) && (getDirSize(m)/1024/1024/1024) <=6)
-					{
-						System.out.println("Größer als 3 und kleiner als 6 GB");
-					}
-					else if ((getDirSize(m)/1024/1024/1024)>6)
-					{
-						System.out.println("Größer als 6 GB");
-					}
-					 */
 				}
 			}
 		}
 	}
-	
+
     public static void main(String[] args)
     {
     	
@@ -80,11 +73,11 @@ public class choose
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //Nur Ordner auswählbar
         int returnVal = fc.showOpenDialog(null);
-        File f;
+        final File f;
         if (returnVal == JFileChooser.APPROVE_OPTION) 	//Wenn gewählt, dann
         {
             f = fc.getSelectedFile();	//Verzeichnis Holen
-	        File f1 = new File(f.getPath());	//In File speichern
+	        final File f1 = new File(f.getPath());	//In File speichern
 	        
 	        //f1.renameTo(new File(f.getPath() + "\\Data"));	//f1 umbenennen
 
@@ -108,9 +101,38 @@ public class choose
       			  }
       	  );
       	  
+      	  btnCSV = new JButton("Save in CSV");
+      	  btnCSV.addActionListener
+      	  (
+      			  new ActionListener()
+      			  {
+      				  public void actionPerformed(ActionEvent e)
+      				  {
+      					try
+      					{
+      					    writer = new FileWriter(f.getPath() + "Filmliste.csv");
+      				
+      					    writer.append("Pfad: \n" + f.getPath() + "\n");
+      						writer.append("Gesamtgröße \n" +(getDirSize(f1)/1024/1024/1024)+ "GB \n");
+      						writer.append("------------------------------------------------------------------------------ \n");
+      				 
+      					    writer.flush();
+      					    writer.close();
+      					}
+      					catch(IOException e1)
+      					{
+      					     e1.printStackTrace();
+      					} 
+      			      	     
+      				  }
+      			  }
+      	  );
+      	  
+      	
      //Scrollbalken und Textarea in panel
  	 frame.getContentPane().add(sbrText);  
  	 frame.getContentPane().add(btnQuit);
+ 	 frame.getContentPane().add(btnCSV);
  	 frame.pack(); // Adjusts frame to size of components
  	 frame.setVisible(true);
         }
