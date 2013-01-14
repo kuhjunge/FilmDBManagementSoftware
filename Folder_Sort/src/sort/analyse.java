@@ -6,7 +6,7 @@ public class analyse {
 
 		File[] files = dir.listFiles();
 		if (files != null) 
-		{ // Erforderliche Berechtigungen etc. sind vorhanden!
+		{ // Erforderliche Berechtigungen etc. sind vorhanden!!!!! CHris
 			for (int i = 0; i < files.length; i++) 
 			{
 				if (files[i].isDirectory()) 
