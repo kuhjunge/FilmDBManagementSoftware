@@ -95,24 +95,25 @@ public class choose
 	        ta.append("Gesamtgröße \n" +(getDirSize(f1)/1024/1024/1024)+ "GB \n");
 	        ta.append("------------------------------------------------------------------------------ \n");
 	        analyse(f1);	//analyse funktion
+	        // Create Quit Button
+      	  btnQuit = new JButton("Quit");
+      	  btnQuit.addActionListener
+      	  (
+      			  new ActionListener()
+      			  {
+      				  public void actionPerformed(ActionEvent e)
+      				  {
+      					  System.exit(0);         
+      				  }
+      			  }
+      	  );
+      	  
+     //Scrollbalken und Textarea in panel
+ 	 frame.getContentPane().add(sbrText);  
+ 	 frame.getContentPane().add(btnQuit);
+ 	 frame.pack(); // Adjusts frame to size of components
+ 	 frame.setVisible(true);
         }
-        // Create Quit Button
-        	  btnQuit = new JButton("Quit");
-        	  btnQuit.addActionListener
-        	  (
-        			  new ActionListener()
-        			  {
-        				  public void actionPerformed(ActionEvent e)
-        				  {
-        					  System.exit(0);         
-        				  }
-        			  }
-        	  );
-        	  
-       //Scrollbalken und Textarea in panel
-   	 frame.getContentPane().add(sbrText);  
-   	 frame.getContentPane().add(btnQuit);
-   	 frame.pack(); // Adjusts frame to size of components
-   	 frame.setVisible(true);
+
     }    
 }
