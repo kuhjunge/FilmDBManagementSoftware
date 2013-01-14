@@ -69,7 +69,7 @@ public class choose
         frame.getContentPane().setLayout(new FlowLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Default Bedeutung "X"
         
-    	 ta = new JTextArea("", 5, 50); //Text Area generieren
+    	 ta = new JTextArea("", 20, 50); //Text Area generieren
     	 ta.setLineWrap(true); //verhindert automatisches verbreitern nach rechts und links
     	 
     	 JScrollPane sbrText = new JScrollPane(ta); //Scrollbalken
