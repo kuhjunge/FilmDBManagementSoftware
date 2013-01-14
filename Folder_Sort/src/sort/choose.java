@@ -6,7 +6,7 @@ import java.io.File;
 import javax.swing.*;
 
 
-//Cooperation von Chris und Merlin
+//Cooperation von Chris und Merlin!!
 public class choose
 {
 	static JTextArea ta; // Text area
