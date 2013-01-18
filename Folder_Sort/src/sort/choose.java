@@ -17,7 +17,7 @@ public class choose
 	static JButton btnCSV;
 	
 	
-	
+	// gibt die Größe eines ausgwählten Datenpfades zurück
 	public static long getDirSize(File dir) {
 		
 		long size = 0;
@@ -35,7 +35,27 @@ public class choose
 		return size;
 	}
 	
+	// Gibt die größe mit Einheit zurück
+	private static String filesize(long groesse)
+	{
+		String erg = "";
+		if (groesse < 1024)
+		{
+			erg = " " + (groesse)+ " Byte \n";
+		}
+		else if (groesse < 1024 * 1024)
+		{
+			erg = " " + (groesse/1024)+ " KB \n";
+		}
+		else if (groesse < 1024 * 1024 * 1024)
+		{
+			erg = " " + (groesse/1024/1024)+ " MB \n";
+		}
+		else erg = " " + (groesse/1024/1024/1024)+ "GB \n";
+		return erg;
+	}
 	
+	// Analysiert irgendwas?
 	public static void analyse(File dir) {
 
 		File[] files = dir.listFiles();
@@ -47,17 +67,16 @@ public class choose
 				{
 					ta.append(files[i].getName());
 					File m = new File (files[i].getAbsolutePath());
-					ta.append(" " + (getDirSize(m)/1024/1024/1024)+ "GB \n");
+					// Größenberechnung 
+					ta.append(filesize(getDirSize(m))); // Funktion Filesize gibt einen String mit Einhait zurück
 				}
 			}
 		}
 	}
 
+	// FUCKING MAIN METHODE DIE ALLES AUSFÜHRT UND SO!!!einself
     public static void main(String[] args)
     {
-    	
-
-   	 
         JFrame frame = new JFrame("Ordnersort"); //Frame für Text Area
         frame.getContentPane().setLayout(new FlowLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Default Bedeutung "X"
@@ -85,7 +104,7 @@ public class choose
 
 	        //Texte in Textarea
 	        ta.append("Pfad: \n" + f.getPath() + "\n");
-	        ta.append("Gesamtgröße \n" +(getDirSize(f1)/1024/1024/1024)+ "GB \n");
+	        ta.append("Gesamtgröße \n" +(filesize(getDirSize(f1))) +" \n");
 	        ta.append("------------------------------------------------------------------------------ \n");
 	        analyse(f1);	//analyse funktion
 	        // Create Quit Button
