@@ -17,7 +17,6 @@ public class choose
 	static JButton btnQuit;
 	static JButton btnCSV;
 	
-	
 	// gibt die Größe eines ausgwählten Datenpfades zurück
 	public static long getDirSize(File dir) {
 		
@@ -144,65 +143,62 @@ public class choose
         frame.getContentPane().setLayout(new FlowLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Default Bedeutung "X"
         
-    	 ta = new JTextArea("", 20, 50); //Text Area generieren
-    	 ta.setLineWrap(true); //verhindert automatisches verbreitern nach rechts und links
-    	 
-    	 JScrollPane sbrText = new JScrollPane(ta); //Scrollbalken
-    	 sbrText.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    	ta = new JTextArea("", 20, 50); //Text Area generieren
+    	ta.setLineWrap(true); //verhindert automatisches verbreitern nach rechts und links
+    	
+    	JScrollPane sbrText = new JScrollPane(ta); //Scrollbalken
+    	sbrText.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 
-    	 //Auswahlfenster Verzeichnis
+    	//Auswahlfenster Verzeichnis
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //Nur Ordner auswählbar
         int returnVal = fc.showOpenDialog(null);
         final File f;
         if (returnVal == JFileChooser.APPROVE_OPTION) 	//Wenn gewählt, dann
         {
-            f = fc.getSelectedFile();	//Verzeichnis Holen
-	        final File f1 = new File(f.getPath());	//In File speichern
-	        
-	        //f1.renameTo(new File(f.getPath() + "\\Data"));	//f1 umbenennen
-
-	        
-
-	        //Texte in Textarea
-	        ta.append("Pfad: \n" + f.getPath() + "\n");
-	        ta.append("Gesamtgröße \n" +(filesize(getDirSize(f1))) +" \n");
-	        ta.append("------------------------------------------------------------------------------ \n");
-	        analyse(f1);	//analyse funktion
-	        // Create Quit Button
-      	  btnQuit = new JButton("Quit");
-      	  btnQuit.addActionListener
-      	  (
-      			  new ActionListener()
-      			  {
-      				  public void actionPerformed(ActionEvent e)
-      				  {
-      					  System.exit(0);         
-      				  }
-      			  }
-      	  );
-      	  
-      	  btnCSV = new JButton("Save in CSV");
-      	  btnCSV.addActionListener // Listener für Button
-      	  (
-      			  new ActionListener()
-      			  {
-      				  public void actionPerformed(ActionEvent e)
-      				  {
-      					 writeCSV(f); // Schreibt die CSV Datei
-      				  }
-      			  }
-      	  );
-      	  
-      	
-     //Scrollbalken und Textarea in panel
- 	 frame.getContentPane().add(sbrText);  
- 	 frame.getContentPane().add(btnQuit);
- 	 frame.getContentPane().add(btnCSV);
- 	 frame.pack(); // Adjusts frame to size of components
- 	 frame.setVisible(true);
+			f = fc.getSelectedFile();	//Verzeichnis Holen
+			final File f1 = new File(f.getPath());	//In File speichern
+			
+			//f1.renameTo(new File(f.getPath() + "\\Data"));	//f1 umbenennen
+			
+			//Texte in Textarea
+			ta.append("Pfad: \n" + f.getPath() + "\n");
+			ta.append("Gesamtgröße \n" +(filesize(getDirSize(f1))) +" \n");
+			ta.append("------------------------------------------------------------------------------ \n");
+			analyse(f1);	//analyse funktion
+	       
+			// Create Quit Button
+			btnQuit = new JButton("Quit");
+			btnQuit.addActionListener
+			(
+			 new ActionListener()
+			 {
+				  public void actionPerformed(ActionEvent e)
+				  {
+						  System.exit(0);         
+				  }
+			  }
+			);
+			 
+			 // Create Save CSV Button
+			 btnCSV = new JButton("Save in CSV");
+			 btnCSV.addActionListener // Listener für Button
+			 (
+				  new ActionListener()
+				  {
+					  public void actionPerformed(ActionEvent e)
+					  {
+						 writeCSV(f); // Schreibt die CSV Datei
+					  }
+				  }
+			 );
+			//Scrollbalken und Textarea in panel
+			frame.getContentPane().add(sbrText);  
+			frame.getContentPane().add(btnQuit);
+			frame.getContentPane().add(btnCSV);
+			frame.pack(); // Adjusts frame to size of components
+			frame.setVisible(true);
         }
-
     }    
 }
