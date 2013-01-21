@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JList;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -59,6 +60,7 @@ public class GUI_SORT extends JFrame {
 		JLabel lblKomplexeErstellungEiner = new JLabel("Komplexe Erstellung einer Filmliste!");
 		lblKomplexeErstellungEiner.setBounds(130, 15, 221, 14);
 		contentPane.add(lblKomplexeErstellungEiner);
+		
 		
 		JButton btnSaveToCsv = new JButton("Save to CSV");
 		JButton btnRename = new JButton("Rename");
@@ -130,11 +132,12 @@ public class GUI_SORT extends JFrame {
 		
 
 				//JList
+				
 				DefaultListModel<String> listModel = new DefaultListModel<String>();
 				JList <String> list = new JList <String>(listModel);
 				list.setBounds(30, 50, 410, 278);
 				
-				
+			      
 				File[] files = f1.listFiles();
 				if (files != null) 
 				{ // Erforderliche Berechtigungen etc. sind vorhanden
