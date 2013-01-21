@@ -1,6 +1,6 @@
 package sort;
-import java.awt.FlowLayout;
-import java.awt.event.*;
+//import java.awt.FlowLayout;
+//import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -13,9 +13,9 @@ import javax.swing.*;
 public class choose
 {
 	static FileWriter writer;
-	static JTextArea ta; // Text area
-	static JButton btnQuit;
-	static JButton btnCSV;
+	//static JTextArea ta; // Text area
+	//static JButton btnQuit;
+	//static JButton btnCSV;
 	
 	// gibt die Größe eines ausgwählten Datenpfades zurück
 	public static long getDirSize(File dir) {
@@ -36,7 +36,7 @@ public class choose
 	}
 	
 	// Schreibt eine CSV mit einer Filmliste in den ausgewählten Ordner
-	private static void writeCSV(File f)
+	void writeCSV(File f)
 	{
 		try
 			{
@@ -117,6 +117,7 @@ public class choose
 		return erg;
 	}
 	
+	/*	
 	// Analysiert irgendwas?
 	public static void analyse(File dir) {
 
@@ -189,7 +190,7 @@ public class choose
 				  {
 					  public void actionPerformed(ActionEvent e)
 					  {
-						 writeCSV(f); // Schreibt die CSV Datei
+						 //writeCSV(f); // Schreibt die CSV Datei
 					  }
 				  }
 			 );
@@ -200,5 +201,6 @@ public class choose
 			frame.pack(); // Adjusts frame to size of components
 			frame.setVisible(true);
         }
-    }    
+    }   
+   */
 }
