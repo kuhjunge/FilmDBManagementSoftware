@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -132,10 +133,13 @@ public class GUI_SORT extends JFrame {
 		
 
 				//JList
+				JScrollPane scrollPane = new JScrollPane();
+				scrollPane.setBounds(99, 50, 276, 278);
+				contentPane.add(scrollPane);
 				
 				DefaultListModel<String> listModel = new DefaultListModel<String>();
 				JList <String> list = new JList <String>(listModel);
-				list.setBounds(30, 50, 410, 278);
+				
 				
 			      
 				File[] files = f1.listFiles();
@@ -149,7 +153,7 @@ public class GUI_SORT extends JFrame {
 						}
 					}
 				}
-				contentPane.add(list);
+				scrollPane.setViewportView(list);
         }
 	}
 }
