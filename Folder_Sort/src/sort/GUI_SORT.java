@@ -10,10 +10,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 public class GUI_SORT extends JFrame {
@@ -68,6 +69,12 @@ public class GUI_SORT extends JFrame {
 		JButton btnInformation = new JButton("Information");
 		JButton btnQuit = new JButton("Quit");
 				
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(99, 50, 276, 278);
+		contentPane.add(scrollPane);
+		
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		final JList <String> list = new JList <String>(listModel);
 		
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //Nur Ordner auswählbar
@@ -80,10 +87,10 @@ public class GUI_SORT extends JFrame {
 			
 			
 				//SaveToCsv Button
-				btnSaveToCsv.addMouseListener(new MouseAdapter() 
+				btnSaveToCsv.addActionListener(new ActionListener() 
 				{
 					@Override
-					public void mouseClicked(MouseEvent arg0) 
+					public void actionPerformed(ActionEvent arg0) 
 					{
 						lib.writeCSV(f); // Schreibt die CSV Datei
 					}
@@ -94,10 +101,10 @@ public class GUI_SORT extends JFrame {
 		
 				
 				//Rename Button
-				btnRename.addMouseListener(new MouseAdapter()
+				btnRename.addActionListener(new ActionListener() 
 				{
 					@Override
-					public void mouseClicked(MouseEvent e) 
+					public void actionPerformed(ActionEvent arg0) 
 					{
 						
 					}
@@ -105,25 +112,25 @@ public class GUI_SORT extends JFrame {
 				btnRename.setBounds(471, 210, 103, 23);
 				contentPane.add(btnRename);
 		
-		
-				//Information Button
-				btnInformation.addMouseListener(new MouseAdapter() 
+					
+				btnInformation.addActionListener(new ActionListener() 
 				{
 					@Override
-					public void mouseClicked(MouseEvent e) 
+					public void actionPerformed(ActionEvent arg0) 
 					{
-						
+						list.getSelectedValue();
+						JOptionPane.showMessageDialog(null, list.getSelectedValue(), "Information", JOptionPane.OK_CANCEL_OPTION);
 					}
 				});
 				btnInformation.setBounds(471, 120, 103, 23);
 				contentPane.add(btnInformation);
-		
-		
+				
+
 				//Quit Button
-				btnQuit.addMouseListener(new MouseAdapter()
+				btnQuit.addActionListener(new ActionListener() 
 				{
 					@Override
-					public void mouseClicked(MouseEvent e) 
+					public void actionPerformed(ActionEvent arg0) 
 					{
 						System.exit(0); 
 					}
@@ -133,12 +140,7 @@ public class GUI_SORT extends JFrame {
 		
 
 				//JList
-				JScrollPane scrollPane = new JScrollPane();
-				scrollPane.setBounds(99, 50, 276, 278);
-				contentPane.add(scrollPane);
-				
-				DefaultListModel<String> listModel = new DefaultListModel<String>();
-				JList <String> list = new JList <String>(listModel);
+
 				
 				
 			      
