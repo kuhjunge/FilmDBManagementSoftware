@@ -1,7 +1,6 @@
 package sort;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -16,6 +15,7 @@ import javax.swing.JScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileFilter;
 
 public class GUI_SORT extends JFrame {
 
@@ -46,7 +46,24 @@ public class GUI_SORT extends JFrame {
 			}
 	});
 }
-
+	//Filter Anzahl MKV Dateien
+	public class FilterFilesmkv implements FileFilter { 
+		  public boolean accept(File file) { 
+		     return !file.isDirectory() && file.getName().endsWith (".mkv"); 
+		  } 
+		}
+	//Filter Anzahl nfo Dateien
+	public class FilterFilesnfo implements FileFilter { 
+		  public boolean accept(File file) { 
+		     return !file.isDirectory() && file.getName().endsWith (".nfo"); 
+		  } 
+		}
+	//Filter Subs vorhanden
+	public class FilterFilessub implements FileFilter { 
+		  public boolean accept(File file) { 
+		     return !file.isDirectory() && (file.getName().endsWith (".srt") || file.getName().endsWith (".sub") || file.getName().endsWith (".idx") || file.getName().endsWith (".ssa") || file.getName().endsWith (".ass")); 
+		  } 
+		}
 	/**
 	 * Create the frame.
 	 * @return 
@@ -140,9 +157,24 @@ public class GUI_SORT extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent arg0) 
 					{
+				        String subvorhanden = null;
 						//Angeklickte Datei auslesen und in Message Dialog
 						list.getSelectedValue();
-						JOptionPane.showMessageDialog(null, list.getSelectedValue(), "Information", JOptionPane.OK_CANCEL_OPTION);
+						// Filter Anzahl mkv Dateien
+						int anzmkvfiles = new File(f.getPath() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesmkv ()).length;
+						//Filter Anzahl nfo Dateien
+						int anznfofiles = new File(f.getPath() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesnfo ()).length;
+						//Filter Subs vorhanden
+						int anzsubfiles = new File(f.getPath() + "\\" + list.getSelectedValue()).listFiles(new FilterFilessub ()).length;
+						if(anzsubfiles > 0) 
+						{
+							subvorhanden = "ja";
+						}
+						else
+						{
+							subvorhanden = "nein";
+						}
+						JOptionPane.showMessageDialog(null, list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: " + anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden, "Information", JOptionPane.OK_CANCEL_OPTION);
 					}
 				});
 				btnInformation.setBounds(471, 120, 103, 23);
