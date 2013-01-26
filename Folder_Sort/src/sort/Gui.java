@@ -1,17 +1,14 @@
 package sort;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.JList;
-import javax.swing.ListModel;
 
 import java.awt.Color;
 import javax.swing.border.LineBorder;
@@ -20,6 +17,10 @@ import java.awt.event.ActionEvent;
 
 public class Gui extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**

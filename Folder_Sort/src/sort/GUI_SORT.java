@@ -49,6 +49,7 @@ public class GUI_SORT extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @return 
 	 */
 	public GUI_SORT() 
 	{
@@ -73,10 +74,11 @@ public class GUI_SORT extends JFrame {
 		scrollPane.setBounds(99, 50, 276, 278);
 		contentPane.add(scrollPane);
 		
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		final DefaultListModel<String> listModel = new DefaultListModel<String>();
 		final JList <String> list = new JList <String>(listModel);
 		
         JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(new File("C:\\"));
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //Nur Ordner auswählbar
         int returnVal = fc.showOpenDialog(null);
         final File f;
@@ -106,7 +108,27 @@ public class GUI_SORT extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent arg0) 
 					{
+						//Angeklickte Datei mit PFad auslesen
+				        File f2 = new File(f.getPath() + "\\" + list.getSelectedValue());
+				        //Eingabefeld
+				        String titel = JOptionPane.showInputDialog("Geben sie den neuen Dateinamen ein: ", list.getSelectedValue());
+				        //Rename Eingegebener neuer Titel
+						f2.renameTo(new File(f.getPath() + "\\" + titel));
+						//JList leeren
+						listModel.clear();
 						
+						//JList neu generieren
+						File[] files = f1.listFiles();
+						if (files != null) 
+						{ // Erforderliche Berechtigungen etc. sind vorhanden
+							for (int i = 0; i < files.length; i++) 
+							{
+								if (files[i].isDirectory()) 
+								{
+									listModel.addElement(files[i].getName());
+								}
+							}
+						}
 					}
 				});
 				btnRename.setBounds(471, 210, 103, 23);
@@ -118,6 +140,7 @@ public class GUI_SORT extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent arg0) 
 					{
+						//Angeklickte Datei auslesen und in Message Dialog
 						list.getSelectedValue();
 						JOptionPane.showMessageDialog(null, list.getSelectedValue(), "Information", JOptionPane.OK_CANCEL_OPTION);
 					}
@@ -139,11 +162,7 @@ public class GUI_SORT extends JFrame {
 				contentPane.add(btnQuit);
 		
 
-				//JList
-
-				
-				
-			      
+				//Jlist
 				File[] files = f1.listFiles();
 				if (files != null) 
 				{ // Erforderliche Berechtigungen etc. sind vorhanden
