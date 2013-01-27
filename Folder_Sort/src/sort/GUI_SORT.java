@@ -174,7 +174,7 @@ public class GUI_SORT extends JFrame {
 						{
 							subvorhanden = "nein";
 						}
-						JOptionPane.showMessageDialog(null, list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: " + anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden, "Information", JOptionPane.OK_CANCEL_OPTION);
+						JOptionPane.showMessageDialog(null, list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: " + anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden + "\n" + "Größe: " + lib.filesize(lib.getDirSize(new File(f.getPath() + "\\" + list.getSelectedValue()))), "Information", JOptionPane.OK_CANCEL_OPTION);
 					}
 				});
 				btnInformation.setBounds(471, 120, 103, 23);

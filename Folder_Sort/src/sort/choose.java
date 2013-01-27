@@ -18,7 +18,7 @@ public class choose
 	//static JButton btnCSV;
 	
 	// gibt die Größe eines ausgwählten Datenpfades zurück
-	public static long getDirSize(File dir) {
+	public long getDirSize(File dir) {
 		
 		long size = 0;
 		File[] files = dir.listFiles();
@@ -98,7 +98,7 @@ public class choose
 	}
 	
 	// Gibt die größe mit Einheit zurück
-	private static String filesize(long groesse)
+	String filesize(long groesse)
 	{
 		String erg = "";
 		if (groesse < 1024)
