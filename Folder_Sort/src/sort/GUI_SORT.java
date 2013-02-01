@@ -24,7 +24,7 @@ public class GUI_SORT extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	final choose lib = new choose();
+	final sort_class lib = new sort_class();
 
 	/**
 	 * Launch the application.
@@ -64,6 +64,7 @@ public class GUI_SORT extends JFrame {
 		     return !file.isDirectory() && (file.getName().endsWith (".srt") || file.getName().endsWith (".sub") || file.getName().endsWith (".idx") || file.getName().endsWith (".ssa") || file.getName().endsWith (".ass")); 
 		  } 
 		}
+
 	/**
 	 * Create the frame.
 	 * @return 
