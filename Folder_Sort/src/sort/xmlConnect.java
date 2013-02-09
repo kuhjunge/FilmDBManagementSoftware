@@ -8,10 +8,8 @@
 package sort;
 import java.io.IOException;
 import java.net.URL;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,7 +17,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class xmlConnect {
-	
 	public String getXml(String id, String name) {
     	String var= "";
     	if (id == "")
@@ -27,8 +24,7 @@ public class xmlConnect {
     		var = "r="+name;
     	}
     	else var = "i="+id;
-    	String ret = "(leer)";
-    	
+    	String ret = "(Fehler beim XML Abruf!)";
     	DocumentBuilderFactory dbc = DocumentBuilderFactory.newInstance();
         DocumentBuilder dbuilder;
         try {
@@ -48,7 +44,6 @@ public class xmlConnect {
         } catch (IOException e) {           
             e.printStackTrace();
         }
-     
    	 return ret;
     }
 }
