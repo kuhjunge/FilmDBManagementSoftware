@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -16,6 +17,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
+import javax.swing.JComboBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 
 public class GUI_SORT extends JFrame {
@@ -73,7 +78,7 @@ public class GUI_SORT extends JFrame {
 	public GUI_SORT() 
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 400);
+		setBounds(100, 100, 600, 462);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -86,15 +91,61 @@ public class GUI_SORT extends JFrame {
 		
 		JButton btnSaveToCsv = new JButton("Save to CSV");
 		JButton btnRename = new JButton("Rename");
-		JButton btnInformation = new JButton("Information");
-		JButton btnGetXML = new JButton("Get XML");
+		JButton btnInformation = new JButton("TechInfo");
+		JButton btnGetXML = new JButton("Info");
 		JButton btnQuit = new JButton("Quit");
 				
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(99, 50, 276, 278);
 		contentPane.add(scrollPane);
 		
+		final JLabel lblTitel = new JLabel("Titel:");
+		lblTitel.setBounds(22, 332, 402, 16);
+		contentPane.add(lblTitel);
+		
+		final JLabel lblGenre = new JLabel("Genre:");
+		lblGenre.setBounds(22, 350, 402, 19);
+		contentPane.add(lblGenre);
+		
+		final JLabel lblPlot = new JLabel("Plot:");
+		lblPlot.setBounds(22, 372, 548, 16);
+		contentPane.add(lblPlot);
+		
+		final JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				String data =(String) comboBox.getSelectedItem();
+				Movie Film = new Movie();
+				try 
+				{
+					if (data != null)
+					{
+						Film.loadIMDB(data);
+						lblTitel.setText("Titel: " +  Film.gettitle());
+						lblGenre.setText("Genre: " +  Film.getgenre());
+						lblPlot.setText("Plot: " +  Film.getplot());
+					}
+					else {
+						lblTitel.setText("Titel: (Wurde nicht erkannt)");
+						lblGenre.setText("Genre: ?");
+						lblPlot.setText("Plot: ?");
+					}
+				}
+				catch (Exception e)
+				{
+					lblTitel.setText("Titel: (Wurde nicht erkannt)");
+					lblGenre.setText("Genre: ?");
+					lblPlot.setText("Plot: ?");
+				}
+			}
+		});
+		comboBox.setBounds(469, 329, 90, 22);
+		contentPane.add(comboBox);
+		
 		final DefaultListModel<String> listModel = new DefaultListModel<String>();
+		final DefaultComboBoxModel<String> imdbListModel = new DefaultComboBoxModel<String>();
+		//final DefaultListModel<String> imdbListModel = new DefaultListModel<String>();
+		final JList <String> imdbList = new JList <String>(imdbListModel);
 		final JList <String> list = new JList <String>(listModel);
 		
         JFileChooser fc = new JFileChooser();
@@ -188,9 +239,42 @@ public class GUI_SORT extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent arg0) 
 					{
-						xmlConnect getxml = new xmlConnect();
-						String mes = getxml.getXml("tt0499549", "");
-						JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
+						Movie Film = new Movie();
+						if (list.getSelectedValue() != null)
+						{
+							Film.loadNamefromInsert(list.getSelectedValue());
+							String auswahl = Film.gettitle();
+							xmlConnect getxml = new xmlConnect();
+							ArrayList<String> data = getxml.getXml(auswahl);
+							imdbListModel.removeAllElements();
+							for (int i = 0; i < data.size(); i++) 
+							{
+									imdbListModel.addElement(data.get(i));
+							}
+							try 
+							{
+								if (data.get(0) != null)
+								{
+									Film.loadIMDB(data.get(0));
+									lblTitel.setText("Titel: " +  Film.gettitle());
+									lblGenre.setText("Genre: " +  Film.getgenre());
+									lblPlot.setText("Plot: " +  Film.getplot());
+								}
+								else {
+									lblTitel.setText("Titel: (Wurde nicht erkannt)");
+									lblGenre.setText("Genre: ?");
+									lblPlot.setText("Plot: ?");
+								}
+							}
+							catch (Exception e)
+							{
+								lblTitel.setText("Titel: (Wurde nicht erkannt)");
+								lblGenre.setText("Genre: ?");
+								lblPlot.setText("Plot: ?");
+							}
+						}
+						//comboBox.add("test2", null);
+						//JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
 					}
 				});
 				btnGetXML.setBounds(471, 90, 103, 23);
@@ -208,7 +292,6 @@ public class GUI_SORT extends JFrame {
 				btnQuit.setBounds(471, 305, 103, 23);
 				contentPane.add(btnQuit);
 		
-
 				//Jlist
 				File[] files = f1.listFiles();
 				if (files != null) 
@@ -222,6 +305,10 @@ public class GUI_SORT extends JFrame {
 					}
 				}
 				scrollPane.setViewportView(list);
+				//scrollPane.setViewportView(imdbList);
+				// add items to listModel...
+				imdbList.setModel(imdbListModel);
+				comboBox.setModel(imdbListModel);
         }
 	}
 }
