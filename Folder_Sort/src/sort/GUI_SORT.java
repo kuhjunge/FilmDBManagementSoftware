@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileFilter;
 
+
 public class GUI_SORT extends JFrame {
 
 	/**
@@ -86,6 +87,7 @@ public class GUI_SORT extends JFrame {
 		JButton btnSaveToCsv = new JButton("Save to CSV");
 		JButton btnRename = new JButton("Rename");
 		JButton btnInformation = new JButton("Information");
+		JButton btnGetXML = new JButton("Get XML");
 		JButton btnQuit = new JButton("Quit");
 				
 		JScrollPane scrollPane = new JScrollPane();
@@ -181,7 +183,19 @@ public class GUI_SORT extends JFrame {
 				btnInformation.setBounds(471, 120, 103, 23);
 				contentPane.add(btnInformation);
 				
-
+				btnGetXML.addActionListener(new ActionListener() 
+				{
+					@Override
+					public void actionPerformed(ActionEvent arg0) 
+					{
+						xmlConnect getxml = new xmlConnect();
+						String mes = getxml.getXml("tt0499549", "");
+						JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
+					}
+				});
+				btnGetXML.setBounds(471, 90, 103, 23);
+				contentPane.add(btnGetXML);
+				
 				//Quit Button
 				btnQuit.addActionListener(new ActionListener() 
 				{
