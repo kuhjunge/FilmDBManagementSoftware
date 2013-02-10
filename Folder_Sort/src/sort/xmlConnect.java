@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
 public class xmlConnect {
 	public ArrayList<String> getXml(String name) {
     	String var = "s="+name.replace(" ", "%20");
-    	ArrayList<String> ret = new ArrayList();
+    	ArrayList<String> ret = new ArrayList<String>();
     	//String[] ret = null;
     	DocumentBuilderFactory dbc = DocumentBuilderFactory.newInstance();
         DocumentBuilder dbuilder;

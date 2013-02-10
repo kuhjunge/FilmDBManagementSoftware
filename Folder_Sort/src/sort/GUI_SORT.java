@@ -145,6 +145,11 @@ public class GUI_SORT extends JFrame {
 		contentPane.add(comboBox);
 		
 		JButton btnSave = new JButton("speichern");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				filmMaster.save();
+			}
+		});
 		btnSave.setBounds(457, 363, 113, 25);
 		contentPane.add(btnSave);
 		
@@ -238,7 +243,7 @@ public class GUI_SORT extends JFrame {
 						JOptionPane.showMessageDialog(null,
 							list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: "
 							+ anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden + "\n" + "Größe: " + 
-							filmMaster.getDirSize(),
+							filmMaster.getSize(),
 							"Information", JOptionPane.OK_CANCEL_OPTION);
 					}
 				});
@@ -315,7 +320,6 @@ public class GUI_SORT extends JFrame {
 					}
 				}
 				scrollPane.setViewportView(list);
-				//scrollPane.setViewportView(imdbList);
 				// add items to listModel...
 				imdbList.setModel(imdbListModel);
 				comboBox.setModel(imdbListModel);

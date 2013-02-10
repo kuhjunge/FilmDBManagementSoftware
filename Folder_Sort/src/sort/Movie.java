@@ -1,10 +1,13 @@
 package sort;
 
 import java.io.File;
-import java.io.IOException;
+//import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 public class Movie {
 	
+	// Datei Variablen
 	private File movieFile = null;
 	private String saveplace = "";
 	private String foldername = "";
@@ -30,15 +33,45 @@ public class Movie {
 	private String mImdbID = "";
 	private String mImdbURL="";
 	
+	// Config Variablen
+	private boolean lockID = false;
+	
 	// Konstruktor
 	public Movie()
 	{
 		
 	}
 	
+	private void clear()
+	{
+		 oTitle = "";
+		 oQually = "";
+		 oTag = "";
+		 oSize ="";
+		
+		// IMDB Variablen
+		 mTitle = "";
+		 mYear = "";
+		 mRated = "";
+		 mReleased = "";
+		 mRuntime = "";
+		 mGenre = "";
+		 mDirector = "";
+		 mWriter = "";
+		 mActors = "";
+		 mPlot = "";
+		 mPoster = "";
+		 mImdbRating = "";
+		 mImdbVotes = "";
+		 mImdbID = "";
+		 mImdbURL="";
+		 lockID = false;
+	}
+	
 	// Läd Filmdaten aus dem Ordernamen
 	public void loadNamefromInsert(String name)
 	{
+		clear(); // Leert das Filmobjekt
 		foldername = name;
 		String[] splitFolder = foldername.split("_",4);
 		// Ausgabe des Split STrings
@@ -49,33 +82,49 @@ public class Movie {
 		if (splitFolder.length > 2)
 			oQually = splitFolder[splitFolder.length - 3]; // Letzten Teil des Strings ausgeben
 		if (splitFolder.length > 3)
-			oQually = " " + splitFolder[splitFolder.length - 4]; // Letzten Teil des Strings ausgeben
+			oQually = splitFolder[splitFolder.length - 4] +"_" + oQually  ; // Letzten Teil des Strings ausgebe
+		oSize = getDirSize();
+		taganalyse();
 	}
 	
 	// Läd Filmdaten von der IMDB
-	public void loadIMDB (String mImdbID)
+	public void loadIMDB (String imdbID)
 	{
-		xmlConnect getxml = new xmlConnect();
-		String[] data =  getxml.getMovieObject(mImdbID);
-		 mTitle = data[0];
-		 mYear = data[1];
-		 mRated = data[2];
-		 mReleased = data[3];
-		 mRuntime = data[4];
-		 mGenre = data[5];
-		 mDirector = data[6];
-		 mWriter = data[7];
-		 mActors = data[8];
-		 mPlot = data[9];
-		 mPoster = data[10];
-		 mImdbRating = data[11];
-		 mImdbVotes = data[12];
-		 mImdbID = data[13];	
-		 mImdbURL = "http://www.imdb.de/title/" + data[13] + "/";
+		if (!lockID)
+		{
+			xmlConnect getxml = new xmlConnect();
+			String[] data =  getxml.getMovieObject(imdbID);
+			 mTitle = data[0];
+			 mYear = data[1];
+			 mRated = data[2];
+			 mReleased = data[3];
+			 mRuntime = data[4];
+			 mGenre = data[5];
+			 mDirector = data[6];
+			 mWriter = data[7];
+			 mActors = data[8];
+			 mPlot = data[9];
+			 mPoster = data[10];
+			 mImdbRating = data[11];
+			 mImdbVotes = data[12];
+			 mImdbID = data[13];	
+			 mImdbURL = "http://www.imdb.de/title/" + data[13] + "/";
+		}
 	}
 	
+	private void taganalyse()
+	{
+		JOptionPane.showMessageDialog(null, oTag);
+		if (oTag.startsWith("tt"))
+		{
+			loadIMDB (oTag);
+			lockID = true;
+		}
+	}
+	
+	
 	// Gibt die Größe des ausgewählten Filmobjektes zurück
-	public String getDirSize() {
+	private String getDirSize() {
 		// lib.getDirSize(new File(f.getPath() + "\\" + list.getSelectedValue())))
 		//f = fc.getSelectedFile();	//Verzeichnis Holen
 		//filmMaster.setFile(f);
@@ -178,11 +227,26 @@ public class Movie {
 	{
 		return mImdbID;
 	}
+	public String getImdbURL ()
+	{
+		return mImdbURL;
+	}
 	public String getFiledir()
 	{
 		return saveplace;
 	}
-	
+	public String getSize()
+	{
+		return oSize;
+	}
+	public String getQually()
+	{
+		return oQually;
+	}
+	public String getTag()
+	{
+		return oTag;
+	}
 	private static String filesize(long groesse)
 	{
 		String erg = "";
@@ -200,5 +264,28 @@ public class Movie {
 		}
 		else erg = " " + (groesse/1024/1024/1024)+ "GB \n";
 		return erg;
+	}
+	//
+	
+	private void mrename(String title)
+	{
+		//Angeklickte Datei mit PFad auslesen
+        File f = new File(saveplace + "\\" + foldername);
+        //Rename Eingegebener neuer Titel
+		f.renameTo(new File(saveplace + "\\" + title));
+	}
+	
+	public void rename()
+	{
+		 mrename(JOptionPane.showInputDialog("Geben sie den neuen Dateinamen ein: ", foldername));
+	}
+	public void save()
+	{
+		if (oTitle != "")
+		{
+			String tag = oTag;
+			if (mImdbID != "") tag = mImdbID;
+			mrename(oQually + "_" + tag + "_" + oTitle);
+		}
 	}
 }
