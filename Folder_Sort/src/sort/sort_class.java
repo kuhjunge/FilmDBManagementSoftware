@@ -14,24 +14,6 @@ public class sort_class
 {
 	static FileWriter writer;
 
-	// gibt die Größe eines ausgwählten Datenpfades zurück
-	public long getDirSize(File dir) {
-		
-		long size = 0;
-		File[] files = dir.listFiles();
-		if (files != null) {
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					size += getDirSize(files[i]); // Gesamtgröße des Verzeichnisses aufaddieren
-				}
-				else {
-					size += files[i].length(); // Größe der Datei aufaddieren
-				}
-			}
-		}
-		return size;
-	}
-	
 	// Schreibt eine CSV mit einer Filmliste in den ausgewählten Ordner
 	void writeCSV(File f)
 	{
@@ -41,7 +23,7 @@ public class sort_class
 			    writer = new FileWriter(f.getPath() + "\\Filmliste.csv");
 		
 			    writer.append("Pfad: ;" + f.getPath() + "\n");
-				writer.append("Gesamtgröße ;" +(filesize(getDirSize(f1))) +" \n");
+				writer.append("Gesamtgröße ;" +(Movie.getOtherDirSize(f1)) +" \n");
 				writer.append("-----------------\n");
 				
 				// Auslesen der Unterordner
@@ -74,7 +56,7 @@ public class sort_class
 							File m = new File (files[i].getAbsolutePath());
 							writer.append(";");
 							// Größenberechnung 
-							writer.append(filesize(getDirSize(m))); // Funktion Filesize gibt einen String mit Einhait zurück
+							writer.append(Movie.getOtherDirSize(m)); // Funktion Filesize gibt einen String mit Einhait zurück
 							writer.append("");
 						}
 					}
@@ -95,22 +77,4 @@ public class sort_class
 	}
 	
 	// Gibt die größe mit Einheit zurück
-	String filesize(long groesse)
-	{
-		String erg = "";
-		if (groesse < 1024)
-		{
-			erg = " " + (groesse)+ " Byte \n";
-		}
-		else if (groesse < 1024 * 1024)
-		{
-			erg = " " + (groesse/1024)+ " KB \n";
-		}
-		else if (groesse < 1024 * 1024 * 1024)
-		{
-			erg = " " + (groesse/1024/1024)+ " MB \n";
-		}
-		else erg = " " + (groesse/1024/1024/1024)+ "GB \n";
-		return erg;
-	}
 }

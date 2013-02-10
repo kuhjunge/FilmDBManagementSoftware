@@ -5,6 +5,7 @@ import java.io.IOException;
 
 public class Movie {
 	
+	private File movieFile = null;
 	private String saveplace = "";
 	private String foldername = "";
 	private String oTitle = "";
@@ -35,14 +36,11 @@ public class Movie {
 		
 	}
 	
+	// Läd Filmdaten aus dem Ordernamen
 	public void loadNamefromInsert(String name)
 	{
 		foldername = name;
 		String[] splitFolder = foldername.split("_",4);
-		// Schreiben der einzelnen Filme in die CSV
-		//writer.append(foldername);
-
-		
 		// Ausgabe des Split STrings
 		if (splitFolder.length > 0)
 			oTitle = splitFolder[splitFolder.length - 1]; // Letzten Teil des Strings ausgeben
@@ -52,12 +50,9 @@ public class Movie {
 			oQually = splitFolder[splitFolder.length - 3]; // Letzten Teil des Strings ausgeben
 		if (splitFolder.length > 3)
 			oQually = " " + splitFolder[splitFolder.length - 4]; // Letzten Teil des Strings ausgeben
-		// Ausgabe der größe
-		//File m = new File (files[i].getAbsolutePath());
-		// Größenberechnung 
-		//filesize(getDirSize(m)); // Funktion Filesize gibt einen String mit Einhait zurück
 	}
 	
+	// Läd Filmdaten von der IMDB
 	public void loadIMDB (String mImdbID)
 	{
 		xmlConnect getxml = new xmlConnect();
@@ -77,6 +72,50 @@ public class Movie {
 		 mImdbVotes = data[12];
 		 mImdbID = data[13];	
 		 mImdbURL = "http://www.imdb.de/title/" + data[13] + "/";
+	}
+	
+	// Gibt die Größe des ausgewählten Filmobjektes zurück
+	public String getDirSize() {
+		// lib.getDirSize(new File(f.getPath() + "\\" + list.getSelectedValue())))
+		//f = fc.getSelectedFile();	//Verzeichnis Holen
+		//filmMaster.setFile(f);
+		//final File f1 = new File(f.getPath());	//In File speichern
+		if (saveplace != "" && foldername != "")
+		{
+			File dir = new File(saveplace + "\\" + foldername);
+			return filesize(getSubDirSize(dir));
+		}
+		else return "";
+	}
+	
+	// Gibt die Größe des ausgewählten Filmobjektes zurück
+	public static String getOtherDirSize(File dir) {
+			return filesize(getSubDirSize(dir));
+	}
+	
+	// Größe aller Objekte in diesem Ordner auslesen 
+	private static long getSubDirSize(File dir) {
+		
+		long size = 0;
+		File[] files = dir.listFiles();
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					size += getSubDirSize(files[i]); // Gesamtgröße des Verzeichnisses aufaddieren
+				}
+				else {
+					size += files[i].length(); // Größe der Datei aufaddieren
+				}
+			}
+		}
+		return size;
+	}
+	
+	// Set Funktion
+	public void setFile(File file)
+	{
+		movieFile = file;
+		saveplace = movieFile.getPath();
 	}
 	
 	// Get Funktionen
@@ -138,5 +177,28 @@ public class Movie {
 	public String getid ()
 	{
 		return mImdbID;
+	}
+	public String getFiledir()
+	{
+		return saveplace;
+	}
+	
+	private static String filesize(long groesse)
+	{
+		String erg = "";
+		if (groesse < 1024)
+		{
+			erg = " " + (groesse)+ " Byte \n";
+		}
+		else if (groesse < 1024 * 1024)
+		{
+			erg = " " + (groesse/1024)+ " KB \n";
+		}
+		else if (groesse < 1024 * 1024 * 1024)
+		{
+			erg = " " + (groesse/1024/1024)+ " MB \n";
+		}
+		else erg = " " + (groesse/1024/1024/1024)+ "GB \n";
+		return erg;
 	}
 }

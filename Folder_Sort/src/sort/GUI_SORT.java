@@ -84,6 +84,9 @@ public class GUI_SORT extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		/* Film Objekt */
+		final Movie filmMaster = new Movie();
+		
 		JLabel lblKomplexeErstellungEiner = new JLabel("Komplexe Erstellung einer Filmliste!");
 		lblKomplexeErstellungEiner.setBounds(130, 15, 221, 14);
 		contentPane.add(lblKomplexeErstellungEiner);
@@ -108,22 +111,21 @@ public class GUI_SORT extends JFrame {
 		contentPane.add(lblGenre);
 		
 		final JLabel lblPlot = new JLabel("Plot:");
-		lblPlot.setBounds(22, 372, 548, 16);
+		lblPlot.setBounds(22, 372, 402, 14);
 		contentPane.add(lblPlot);
 		
 		final JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				String data =(String) comboBox.getSelectedItem();
-				Movie Film = new Movie();
 				try 
 				{
 					if (data != null)
 					{
-						Film.loadIMDB(data);
-						lblTitel.setText("Titel: " +  Film.gettitle());
-						lblGenre.setText("Genre: " +  Film.getgenre());
-						lblPlot.setText("Plot: " +  Film.getplot());
+						filmMaster.loadIMDB(data);
+						lblTitel.setText("Titel: " +  filmMaster.gettitle());
+						lblGenre.setText("Genre: " +  filmMaster.getgenre());
+						lblPlot.setText("Plot: " +  filmMaster.getplot());
 					}
 					else {
 						lblTitel.setText("Titel: (Wurde nicht erkannt)");
@@ -139,8 +141,12 @@ public class GUI_SORT extends JFrame {
 				}
 			}
 		});
-		comboBox.setBounds(469, 329, 90, 22);
+		comboBox.setBounds(457, 329, 113, 22);
 		contentPane.add(comboBox);
+		
+		JButton btnSave = new JButton("speichern");
+		btnSave.setBounds(457, 363, 113, 25);
+		contentPane.add(btnSave);
 		
 		final DefaultListModel<String> listModel = new DefaultListModel<String>();
 		final DefaultComboBoxModel<String> imdbListModel = new DefaultComboBoxModel<String>();
@@ -156,8 +162,8 @@ public class GUI_SORT extends JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) 	//Wenn gewählt, dann
         {
 			f = fc.getSelectedFile();	//Verzeichnis Holen
-			final File f1 = new File(f.getPath());	//In File speichern
-			
+			filmMaster.setFile(f);
+			final File f1 = new File(filmMaster.getFiledir());	//In File speichern
 			
 				//SaveToCsv Button
 				btnSaveToCsv.addActionListener(new ActionListener() 
@@ -180,11 +186,11 @@ public class GUI_SORT extends JFrame {
 					public void actionPerformed(ActionEvent arg0) 
 					{
 						//Angeklickte Datei mit PFad auslesen
-				        File f2 = new File(f.getPath() + "\\" + list.getSelectedValue());
+				        File f2 = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue());
 				        //Eingabefeld
 				        String titel = JOptionPane.showInputDialog("Geben sie den neuen Dateinamen ein: ", list.getSelectedValue());
 				        //Rename Eingegebener neuer Titel
-						f2.renameTo(new File(f.getPath() + "\\" + titel));
+						f2.renameTo(new File(filmMaster.getFiledir() + "\\" + titel));
 						//JList leeren
 						listModel.clear();
 						
@@ -215,11 +221,11 @@ public class GUI_SORT extends JFrame {
 						//Angeklickte Datei auslesen und in Message Dialog
 						list.getSelectedValue();
 						// Filter Anzahl mkv Dateien
-						int anzmkvfiles = new File(f.getPath() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesmkv ()).length;
+						int anzmkvfiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesmkv ()).length;
 						//Filter Anzahl nfo Dateien
-						int anznfofiles = new File(f.getPath() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesnfo ()).length;
+						int anznfofiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesnfo ()).length;
 						//Filter Subs vorhanden
-						int anzsubfiles = new File(f.getPath() + "\\" + list.getSelectedValue()).listFiles(new FilterFilessub ()).length;
+						int anzsubfiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilessub ()).length;
 						if(anzsubfiles > 0) 
 						{
 							subvorhanden = "ja";
@@ -228,7 +234,12 @@ public class GUI_SORT extends JFrame {
 						{
 							subvorhanden = "nein";
 						}
-						JOptionPane.showMessageDialog(null, list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: " + anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden + "\n" + "Größe: " + lib.filesize(lib.getDirSize(new File(f.getPath() + "\\" + list.getSelectedValue()))), "Information", JOptionPane.OK_CANCEL_OPTION);
+						filmMaster.loadNamefromInsert(list.getSelectedValue());
+						JOptionPane.showMessageDialog(null,
+							list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: "
+							+ anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden + "\n" + "Größe: " + 
+							filmMaster.getDirSize(),
+							"Information", JOptionPane.OK_CANCEL_OPTION);
 					}
 				});
 				btnInformation.setBounds(471, 120, 103, 23);
@@ -239,11 +250,10 @@ public class GUI_SORT extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent arg0) 
 					{
-						Movie Film = new Movie();
 						if (list.getSelectedValue() != null)
 						{
-							Film.loadNamefromInsert(list.getSelectedValue());
-							String auswahl = Film.gettitle();
+							filmMaster.loadNamefromInsert(list.getSelectedValue());
+							String auswahl = filmMaster.gettitle();
 							xmlConnect getxml = new xmlConnect();
 							ArrayList<String> data = getxml.getXml(auswahl);
 							imdbListModel.removeAllElements();
@@ -255,10 +265,10 @@ public class GUI_SORT extends JFrame {
 							{
 								if (data.get(0) != null)
 								{
-									Film.loadIMDB(data.get(0));
-									lblTitel.setText("Titel: " +  Film.gettitle());
-									lblGenre.setText("Genre: " +  Film.getgenre());
-									lblPlot.setText("Plot: " +  Film.getplot());
+									filmMaster.loadIMDB(data.get(0));
+									lblTitel.setText("Titel: " +  filmMaster.gettitle());
+									lblGenre.setText("Genre: " +  filmMaster.getgenre());
+									lblPlot.setText("Plot: " +  filmMaster.getplot());
 								}
 								else {
 									lblTitel.setText("Titel: (Wurde nicht erkannt)");
