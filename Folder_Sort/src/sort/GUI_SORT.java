@@ -77,8 +77,9 @@ public class GUI_SORT extends JFrame {
 	 */
 	public GUI_SORT() 
 	{
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 462);
+		setBounds(100, 100, 445, 462);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -86,34 +87,39 @@ public class GUI_SORT extends JFrame {
 		
 		/* Film Objekt */
 		final Movie filmMaster = new Movie();
+		// Liste für die IMDB Filmauswahl
+		final DefaultComboBoxModel<String> imdbListModel = new DefaultComboBoxModel<String>();
+		final JList <String> imdbList = new JList <String>(imdbListModel);
+		// Liste für die Filme auf der Festplatte
+		final DefaultListModel<String> listModel = new DefaultListModel<String>();
+		final JList <String> list = new JList <String>(listModel);
 		
+		// Label Titel
 		JLabel lblKomplexeErstellungEiner = new JLabel("Komplexe Erstellung einer Filmliste!");
-		lblKomplexeErstellungEiner.setBounds(130, 15, 221, 14);
+		lblKomplexeErstellungEiner.setBounds(12, 13, 221, 14);
 		contentPane.add(lblKomplexeErstellungEiner);
 		
-		
-		JButton btnSaveToCsv = new JButton("Save to CSV");
-		JButton btnRename = new JButton("Rename");
-		JButton btnInformation = new JButton("TechInfo");
-		JButton btnGetXML = new JButton("Info");
-		JButton btnQuit = new JButton("Quit");
-				
+		// Scroll Panel
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(99, 50, 276, 278);
+		scrollPane.setBounds(12, 42, 276, 278);
 		contentPane.add(scrollPane);
 		
+		// Label Titel
 		final JLabel lblTitel = new JLabel("Titel:");
 		lblTitel.setBounds(22, 332, 402, 16);
 		contentPane.add(lblTitel);
 		
+		// Label Genre
 		final JLabel lblGenre = new JLabel("Genre:");
 		lblGenre.setBounds(22, 350, 402, 19);
 		contentPane.add(lblGenre);
 		
+		// Label Plot
 		final JLabel lblPlot = new JLabel("Plot:");
 		lblPlot.setBounds(22, 372, 402, 14);
 		contentPane.add(lblPlot);
 		
+		// Label Auswahl IMDB ID
 		final JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -141,24 +147,163 @@ public class GUI_SORT extends JFrame {
 				}
 			}
 		});
-		comboBox.setBounds(457, 329, 113, 22);
+		comboBox.setBounds(314, 257, 103, 22);
 		contentPane.add(comboBox);
 		
+		// Button Save
 		JButton btnSave = new JButton("speichern");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				filmMaster.save();
 			}
 		});
-		btnSave.setBounds(457, 363, 113, 25);
+		btnSave.setBounds(311, 292, 103, 25);
 		contentPane.add(btnSave);
 		
-		final DefaultListModel<String> listModel = new DefaultListModel<String>();
-		final DefaultComboBoxModel<String> imdbListModel = new DefaultComboBoxModel<String>();
-		//final DefaultListModel<String> imdbListModel = new DefaultListModel<String>();
-		final JList <String> imdbList = new JList <String>(imdbListModel);
-		final JList <String> list = new JList <String>(listModel);
+		//SaveToCsv Button
+		JButton btnSaveToCsv = new JButton("Save to CSV");
+		btnSaveToCsv.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				lib.writeCSV(filmMaster.getFile()); // Schreibt die CSV Datei
+			}
+		});
+
+		btnSaveToCsv.setBounds(314, 9, 103, 23);
+		contentPane.add(btnSaveToCsv);
 		
+		//Rename Button
+		JButton btnRename = new JButton("Rename");
+		btnRename.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				//Angeklickte Datei mit PFad auslesen
+		        File f2 = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue());
+		        //Eingabefeld
+		        String titel = JOptionPane.showInputDialog("Geben sie den neuen Dateinamen ein: ", list.getSelectedValue());
+		        //Rename Eingegebener neuer Titel
+				f2.renameTo(new File(filmMaster.getFiledir() + "\\" + titel));
+				//JList leeren
+				listModel.clear();
+				
+				//JList neu generieren
+				File f1 = new File(filmMaster.getFiledir());
+				File[] files = f1.listFiles();
+				if (files != null) 
+				{ // Erforderliche Berechtigungen etc. sind vorhanden
+					for (int i = 0; i < files.length; i++) 
+					{
+						if (files[i].isDirectory()) 
+						{
+							listModel.addElement(files[i].getName());
+						}
+					}
+				}
+			}
+		});
+		btnRename.setBounds(314, 114, 103, 23);
+		contentPane.add(btnRename);
+		
+		// TechInfo Button
+		JButton btnInformation = new JButton("TechInfo");
+		btnInformation.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+		        String subvorhanden = null;
+				//Angeklickte Datei auslesen und in Message Dialog
+				list.getSelectedValue();
+				// Filter Anzahl mkv Dateien
+				int anzmkvfiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesmkv ()).length;
+				//Filter Anzahl nfo Dateien
+				int anznfofiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesnfo ()).length;
+				//Filter Subs vorhanden
+				int anzsubfiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilessub ()).length;
+				if(anzsubfiles > 0) 
+				{
+					subvorhanden = "ja";
+				}
+				else
+				{
+					subvorhanden = "nein";
+				}
+				filmMaster.loadNamefromInsert(list.getSelectedValue());
+				JOptionPane.showMessageDialog(null,
+					list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: "
+					+ anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden + "\n" + "Größe: " + 
+					filmMaster.getSize(),
+					"Information", JOptionPane.OK_CANCEL_OPTION);
+			}
+		});
+		btnInformation.setBounds(314, 78, 103, 23);
+		contentPane.add(btnInformation);
+		
+		// Button GetXML
+		JButton btnGetXML = new JButton("Info");
+		btnGetXML.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				if (list.getSelectedValue() != null)
+				{
+					filmMaster.loadNamefromInsert(list.getSelectedValue());
+					String auswahl = filmMaster.gettitle();
+					xmlConnect getxml = new xmlConnect();
+					ArrayList<String> data = getxml.getXml(auswahl);
+					imdbListModel.removeAllElements();
+					for (int i = 0; i < data.size(); i++) 
+					{
+							imdbListModel.addElement(data.get(i));
+					}
+					try 
+					{
+						if (data.get(0) != null)
+						{
+							filmMaster.loadIMDB(data.get(0));
+							lblTitel.setText("Titel: " +  filmMaster.gettitle());
+							lblGenre.setText("Genre: " +  filmMaster.getgenre());
+							lblPlot.setText("Plot: " +  filmMaster.getplot());
+						}
+						else {
+							lblTitel.setText("Titel: (Wurde nicht erkannt)");
+							lblGenre.setText("Genre: ?");
+							lblPlot.setText("Plot: ?");
+						}
+					}
+					catch (Exception e)
+					{
+						lblTitel.setText("Titel: (Wurde nicht erkannt)");
+						lblGenre.setText("Genre: ?");
+						lblPlot.setText("Plot: ?");
+					}
+				}
+				//comboBox.add("test2", null);
+				//JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
+			}
+		});
+		btnGetXML.setBounds(314, 42, 103, 23);
+		contentPane.add(btnGetXML);
+		
+		//Quit Button
+		JButton btnQuit = new JButton("Quit");
+		btnQuit.addActionListener(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				System.exit(0); 
+			}
+		});
+		btnQuit.setBounds(314, 150, 103, 23);
+		contentPane.add(btnQuit);
+		
+		// File auswahl
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File("C:\\"));
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //Nur Ordner auswählbar
@@ -169,144 +314,7 @@ public class GUI_SORT extends JFrame {
 			f = fc.getSelectedFile();	//Verzeichnis Holen
 			filmMaster.setFile(f);
 			final File f1 = new File(filmMaster.getFiledir());	//In File speichern
-			
-				//SaveToCsv Button
-				btnSaveToCsv.addActionListener(new ActionListener() 
-				{
-					@Override
-					public void actionPerformed(ActionEvent arg0) 
-					{
-						lib.writeCSV(f); // Schreibt die CSV Datei
-					}
-				});
-		
-				btnSaveToCsv.setBounds(471, 30, 103, 23);
-				contentPane.add(btnSaveToCsv);
-		
-				
-				//Rename Button
-				btnRename.addActionListener(new ActionListener() 
-				{
-					@Override
-					public void actionPerformed(ActionEvent arg0) 
-					{
-						//Angeklickte Datei mit PFad auslesen
-				        File f2 = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue());
-				        //Eingabefeld
-				        String titel = JOptionPane.showInputDialog("Geben sie den neuen Dateinamen ein: ", list.getSelectedValue());
-				        //Rename Eingegebener neuer Titel
-						f2.renameTo(new File(filmMaster.getFiledir() + "\\" + titel));
-						//JList leeren
-						listModel.clear();
-						
-						//JList neu generieren
-						File[] files = f1.listFiles();
-						if (files != null) 
-						{ // Erforderliche Berechtigungen etc. sind vorhanden
-							for (int i = 0; i < files.length; i++) 
-							{
-								if (files[i].isDirectory()) 
-								{
-									listModel.addElement(files[i].getName());
-								}
-							}
-						}
-					}
-				});
-				btnRename.setBounds(471, 210, 103, 23);
-				contentPane.add(btnRename);
-		
-					
-				btnInformation.addActionListener(new ActionListener() 
-				{
-					@Override
-					public void actionPerformed(ActionEvent arg0) 
-					{
-				        String subvorhanden = null;
-						//Angeklickte Datei auslesen und in Message Dialog
-						list.getSelectedValue();
-						// Filter Anzahl mkv Dateien
-						int anzmkvfiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesmkv ()).length;
-						//Filter Anzahl nfo Dateien
-						int anznfofiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilesnfo ()).length;
-						//Filter Subs vorhanden
-						int anzsubfiles = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue()).listFiles(new FilterFilessub ()).length;
-						if(anzsubfiles > 0) 
-						{
-							subvorhanden = "ja";
-						}
-						else
-						{
-							subvorhanden = "nein";
-						}
-						filmMaster.loadNamefromInsert(list.getSelectedValue());
-						JOptionPane.showMessageDialog(null,
-							list.getSelectedValue() + "\n" + "Anzahl mkv Dateien: " + anzmkvfiles + "\n" + "Anzahl nfo Dateien: "
-							+ anznfofiles + "\n" + "Untertitel vorhanden: " + subvorhanden + "\n" + "Größe: " + 
-							filmMaster.getSize(),
-							"Information", JOptionPane.OK_CANCEL_OPTION);
-					}
-				});
-				btnInformation.setBounds(471, 120, 103, 23);
-				contentPane.add(btnInformation);
-				
-				btnGetXML.addActionListener(new ActionListener() 
-				{
-					@Override
-					public void actionPerformed(ActionEvent arg0) 
-					{
-						if (list.getSelectedValue() != null)
-						{
-							filmMaster.loadNamefromInsert(list.getSelectedValue());
-							String auswahl = filmMaster.gettitle();
-							xmlConnect getxml = new xmlConnect();
-							ArrayList<String> data = getxml.getXml(auswahl);
-							imdbListModel.removeAllElements();
-							for (int i = 0; i < data.size(); i++) 
-							{
-									imdbListModel.addElement(data.get(i));
-							}
-							try 
-							{
-								if (data.get(0) != null)
-								{
-									filmMaster.loadIMDB(data.get(0));
-									lblTitel.setText("Titel: " +  filmMaster.gettitle());
-									lblGenre.setText("Genre: " +  filmMaster.getgenre());
-									lblPlot.setText("Plot: " +  filmMaster.getplot());
-								}
-								else {
-									lblTitel.setText("Titel: (Wurde nicht erkannt)");
-									lblGenre.setText("Genre: ?");
-									lblPlot.setText("Plot: ?");
-								}
-							}
-							catch (Exception e)
-							{
-								lblTitel.setText("Titel: (Wurde nicht erkannt)");
-								lblGenre.setText("Genre: ?");
-								lblPlot.setText("Plot: ?");
-							}
-						}
-						//comboBox.add("test2", null);
-						//JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
-					}
-				});
-				btnGetXML.setBounds(471, 90, 103, 23);
-				contentPane.add(btnGetXML);
-				
-				//Quit Button
-				btnQuit.addActionListener(new ActionListener() 
-				{
-					@Override
-					public void actionPerformed(ActionEvent arg0) 
-					{
-						System.exit(0); 
-					}
-				});
-				btnQuit.setBounds(471, 305, 103, 23);
-				contentPane.add(btnQuit);
-		
+
 				//Jlist
 				File[] files = f1.listFiles();
 				if (files != null) 

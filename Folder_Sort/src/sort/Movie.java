@@ -235,6 +235,10 @@ public class Movie {
 	{
 		return saveplace;
 	}
+	public File getFile()
+	{
+		return movieFile;
+	}
 	public String getSize()
 	{
 		return oSize;
