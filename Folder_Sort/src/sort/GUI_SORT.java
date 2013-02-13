@@ -117,18 +117,42 @@ public class GUI_SORT extends JFrame {
 		
 		// Label Titel
 		final JLabel lblTitel = new JLabel("Titel:");
-		lblTitel.setBounds(302, 47, 239, 16);
+		lblTitel.setBounds(302, 103, 239, 16);
 		contentPane.add(lblTitel);
 		
 		// Label Genre
 		final JLabel lblGenre = new JLabel("Genre:");
-		lblGenre.setBounds(300, 70, 241, 19);
+		lblGenre.setBounds(300, 126, 241, 19);
 		contentPane.add(lblGenre);
 		
 		// Label Plot
 		final JLabel lblPlot = new JLabel("Plot:");
 		lblPlot.setBounds(300, 266, 402, 14);
 		contentPane.add(lblPlot);
+		
+		final JLabel lblJahr = new JLabel("Jahr: ");
+		lblJahr.setBounds(300, 158, 86, 16);
+		contentPane.add(lblJahr);
+		
+		final JLabel lblLaufzeit = new JLabel("Laufzeit:");
+		lblLaufzeit.setBounds(388, 158, 103, 16);
+		contentPane.add(lblLaufzeit);
+		
+		final JLabel lblRating = new JLabel("Wertung: ");
+		lblRating.setBounds(300, 187, 76, 16);
+		contentPane.add(lblRating);
+		
+		final JLabel lblSchauspieler = new JLabel("Schauspieler:");
+		lblSchauspieler.setBounds(300, 216, 212, 16);
+		contentPane.add(lblSchauspieler);
+		
+		final JLabel lblDirector = new JLabel("Direktor:");
+		lblDirector.setBounds(300, 245, 212, 16);
+		contentPane.add(lblDirector);
+		
+		final JLabel lblGroesse = new JLabel("Gr\u00F6\u00DFe:");
+		lblGroesse.setBounds(388, 187, 109, 16);
+		contentPane.add(lblGroesse);
 		
 		// Label Auswahl IMDB ID
 		final JComboBox<String> comboBox = new JComboBox<String>();
@@ -137,26 +161,30 @@ public class GUI_SORT extends JFrame {
 				String data =(String) comboBox.getSelectedItem();
 				try 
 				{
-					if (data != null)
-					{
 						filmMaster.loadIMDB(data);
 						lblTitel.setText("Titel: " +  filmMaster.gettitle());
 						lblGenre.setText("Genre: " +  filmMaster.getgenre());
 						lblPlot.setText("Plot: " +  filmMaster.getplot());
+						lblJahr.setText("Jahr: " + filmMaster.getyear());
+						lblLaufzeit.setText("Laufzeit: " + filmMaster.getruntime());
+						lblRating.setText("Wertung: " + filmMaster.getrating());
+						lblSchauspieler.setText("Schauspieler: " + filmMaster.getactors());
+						lblDirector.setText("Direktor: " + filmMaster.getdirector());
+						lblGroesse.setText("Größe: " + filmMaster.getSize());
 						lblPic.setIcon(filmMaster.getpic()); // zeige Bild an
 					}
-					else {
-						lblTitel.setText("Titel: (Wurde nicht gefunden)");
+					catch (Exception e)
+					{
+						lblTitel.setText("Titel: (Wurde nicht erkannt)");
 						lblGenre.setText("Genre: ?");
 						lblPlot.setText("Plot: ?");
+						lblJahr.setText("Jahr: ");
+						lblLaufzeit.setText("Laufzeit: ");
+						lblRating.setText("Wertung: ");
+						lblSchauspieler.setText("Schauspieler: ");
+						lblDirector.setText("Direktor: ");
+						lblGroesse.setText("Größe: ");
 					}
-				}
-				catch (Exception e)
-				{
-					lblTitel.setText("Titel: (Wurde nicht erkannt)");
-					lblGenre.setText("Genre: ?");
-					lblPlot.setText("Plot: ?");
-				}
 			}
 		});
 		comboBox.setBounds(409, 293, 103, 27);
@@ -167,6 +195,20 @@ public class GUI_SORT extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				filmMaster.save();
+				listModel.clear();
+				//JList neu generieren
+				File f1 = new File(filmMaster.getFiledir());
+				File[] files = f1.listFiles();
+				if (files != null) 
+				{ // Erforderliche Berechtigungen etc. sind vorhanden
+					for (int i = 0; i < files.length; i++) 
+					{
+						if (files[i].isDirectory()) 
+						{
+							listModel.addElement(files[i].getName());
+						}
+					}
+				}
 			}
 		});
 		btnSave.setBounds(578, 293, 103, 27);
@@ -256,7 +298,7 @@ public class GUI_SORT extends JFrame {
 		contentPane.add(btnInformation);
 		
 		// Button GetXML
-		JButton btnGetXML = new JButton("Info");
+		final JButton btnGetXML = new JButton("Info");
 		btnGetXML.addActionListener(new ActionListener() 
 		{
 			@Override
@@ -275,32 +317,36 @@ public class GUI_SORT extends JFrame {
 					}
 					try 
 					{
-						if (data.get(0) != null)
-						{
-							filmMaster.loadIMDB(data.get(0));
-							lblTitel.setText("Titel: " +  filmMaster.gettitle());
-							lblGenre.setText("Genre: " +  filmMaster.getgenre());
-							lblPlot.setText("Plot: " +  filmMaster.getplot());
-							lblPic.setIcon(filmMaster.getpic()); // zeige Bild an
-						}
-						else {
-							lblTitel.setText("Titel: (Wurde nicht gefunden)");
-							lblGenre.setText("Genre: ?");
-							lblPlot.setText("Plot: ?");
-						}
+						filmMaster.loadIMDB(data.get(0));
+						lblTitel.setText("Titel: " +  filmMaster.gettitle());
+						lblGenre.setText("Genre: " +  filmMaster.getgenre());
+						lblPlot.setText("Plot: " +  filmMaster.getplot());
+						lblJahr.setText("Jahr: " + filmMaster.getyear());
+						lblLaufzeit.setText("Laufzeit: " + filmMaster.getruntime());
+						lblRating.setText("Wertung: " + filmMaster.getrating());
+						lblSchauspieler.setText("Schauspieler: " + filmMaster.getactors());
+						lblDirector.setText("Direktor: " + filmMaster.getdirector());
+						lblGroesse.setText("Größe: " + filmMaster.getSize());
+						lblPic.setIcon(filmMaster.getpic()); // zeige Bild an
 					}
 					catch (Exception e)
 					{
 						lblTitel.setText("Titel: (Wurde nicht erkannt)");
 						lblGenre.setText("Genre: ?");
 						lblPlot.setText("Plot: ?");
+						lblJahr.setText("Jahr: ");
+						lblLaufzeit.setText("Laufzeit: ");
+						lblRating.setText("Wertung: ");
+						lblSchauspieler.setText("Schauspieler: ");
+						lblDirector.setText("Direktor: ");
+						lblGroesse.setText("Größe: ");
 					}
 				}
 				//comboBox.add("test2", null);
 				//JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
 			}
 		});
-		btnGetXML.setBounds(12, 328, 103, 23);
+		btnGetXML.setBounds(300, 47, 103, 23);
 		contentPane.add(btnGetXML);
 		
 		//Quit Button
@@ -321,7 +367,43 @@ public class GUI_SORT extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				String input = JOptionPane.showInputDialog("Geben sie den Suchbegriff oder die IMDB ID ein: ", null);
-				filmMaster.setQuery(input);
+				if (input != "")
+				{
+					filmMaster.setQuery(input);
+					xmlConnect getxml = new xmlConnect();
+					ArrayList<String> data = getxml.getXml(filmMaster.gettitle());
+					imdbListModel.removeAllElements();
+					for (int i = 0; i < data.size(); i++) 
+					{
+							imdbListModel.addElement(data.get(i));
+					}
+					try 
+					{
+							filmMaster.loadIMDB(data.get(0));
+							lblTitel.setText("Titel: " +  filmMaster.gettitle());
+							lblGenre.setText("Genre: " +  filmMaster.getgenre());
+							lblPlot.setText("Plot: " +  filmMaster.getplot());
+							lblJahr.setText("Jahr: " + filmMaster.getyear());
+							lblLaufzeit.setText("Laufzeit: " + filmMaster.getruntime());
+							lblRating.setText("Wertung: " + filmMaster.getrating());
+							lblSchauspieler.setText("Schauspieler: " + filmMaster.getactors());
+							lblDirector.setText("Direktor: " + filmMaster.getdirector());
+							lblGroesse.setText("Größe: " + filmMaster.getSize());
+							lblPic.setIcon(filmMaster.getpic()); // zeige Bild an
+						}
+						catch (Exception e)
+						{
+							lblTitel.setText("Titel: (Wurde nicht erkannt)");
+							lblGenre.setText("Genre: ?");
+							lblPlot.setText("Plot: ?");
+							lblJahr.setText("Jahr: ");
+							lblLaufzeit.setText("Laufzeit: ");
+							lblRating.setText("Wertung: ");
+							lblSchauspieler.setText("Schauspieler: ");
+							lblDirector.setText("Direktor: ");
+							lblGroesse.setText("Größe: ");
+						}
+				}
 			}
 		});
 		button.setBounds(524, 293, 48, 27);

@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,12 +22,12 @@ import org.xml.sax.SAXException;
 
 public class xmlConnect {
 	public ArrayList<String> getXml(String name) {
-    	String var = "s="+name.replace(" ", "%20");
-    	ArrayList<String> ret = new ArrayList<String>();
-    	//String[] ret = null;
-    	DocumentBuilderFactory dbc = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dbuilder;
+		ArrayList<String> ret = new ArrayList<String>();
         try {
+        	String var = "s="+name.replace(" ", "%20");
+        	//String[] ret = null;
+        	DocumentBuilderFactory dbc = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dbuilder;
             dbuilder = dbc.newDocumentBuilder();
             Document doc = dbuilder.parse(new URL("http://www.omdbapi.com/?r=xml&" + var).openStream());
             NodeList nl = doc.getElementsByTagName("Movie");
@@ -36,11 +38,17 @@ public class xmlConnect {
                     //System.out.println(e.getAttribute("imdbID"));
                 //}
             }
-        } catch (ParserConfigurationException e) {          
+        } catch (ParserConfigurationException e) { 
+        	JOptionPane.showMessageDialog(null, "Fehler XML 1");
             e.printStackTrace();
-        } catch (SAXException e) {          
+        } catch (SAXException e) { 
+        	JOptionPane.showMessageDialog(null, "Fehler XML 2");
             e.printStackTrace();
-        } catch (IOException e) {           
+        } catch (IOException e) {
+        	JOptionPane.showMessageDialog(null, "Fehler XML 3");
+            e.printStackTrace();
+        } catch (Exception e) {
+        	JOptionPane.showMessageDialog(null, "Fehler XML 4");
             e.printStackTrace();
         }
    	 return ret;

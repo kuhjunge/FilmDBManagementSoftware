@@ -178,7 +178,7 @@ public class Movie {
 		}
 		else 
 		{
-			loadNamefromInsert(input);
+			oTitle = input;
 		}
 	}
 	
