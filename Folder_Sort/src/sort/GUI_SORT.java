@@ -1,11 +1,14 @@
 package sort;
 
 import java.awt.EventQueue;
+import java.awt.Image;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -17,10 +20,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileFilter;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class GUI_SORT extends JFrame {
@@ -79,7 +85,7 @@ public class GUI_SORT extends JFrame {
 	{
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 445, 462);
+		setBounds(100, 100, 720, 391);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -94,6 +100,11 @@ public class GUI_SORT extends JFrame {
 		final DefaultListModel<String> listModel = new DefaultListModel<String>();
 		final JList <String> list = new JList <String>(listModel);
 		
+		//LabelPic
+		final JLabel lblPic = new JLabel(" ");
+		lblPic.setBounds(553, 47, 150, 150);
+		contentPane.add(lblPic);
+		
 		// Label Titel
 		JLabel lblKomplexeErstellungEiner = new JLabel("Komplexe Erstellung einer Filmliste!");
 		lblKomplexeErstellungEiner.setBounds(12, 13, 221, 14);
@@ -106,17 +117,17 @@ public class GUI_SORT extends JFrame {
 		
 		// Label Titel
 		final JLabel lblTitel = new JLabel("Titel:");
-		lblTitel.setBounds(22, 332, 402, 16);
+		lblTitel.setBounds(302, 47, 239, 16);
 		contentPane.add(lblTitel);
 		
 		// Label Genre
 		final JLabel lblGenre = new JLabel("Genre:");
-		lblGenre.setBounds(22, 350, 402, 19);
+		lblGenre.setBounds(300, 70, 241, 19);
 		contentPane.add(lblGenre);
 		
 		// Label Plot
 		final JLabel lblPlot = new JLabel("Plot:");
-		lblPlot.setBounds(22, 372, 402, 14);
+		lblPlot.setBounds(300, 266, 402, 14);
 		contentPane.add(lblPlot);
 		
 		// Label Auswahl IMDB ID
@@ -132,9 +143,10 @@ public class GUI_SORT extends JFrame {
 						lblTitel.setText("Titel: " +  filmMaster.gettitle());
 						lblGenre.setText("Genre: " +  filmMaster.getgenre());
 						lblPlot.setText("Plot: " +  filmMaster.getplot());
+						lblPic.setIcon(filmMaster.getpic()); // zeige Bild an
 					}
 					else {
-						lblTitel.setText("Titel: (Wurde nicht erkannt)");
+						lblTitel.setText("Titel: (Wurde nicht gefunden)");
 						lblGenre.setText("Genre: ?");
 						lblPlot.setText("Plot: ?");
 					}
@@ -147,7 +159,7 @@ public class GUI_SORT extends JFrame {
 				}
 			}
 		});
-		comboBox.setBounds(314, 257, 103, 22);
+		comboBox.setBounds(409, 293, 103, 27);
 		contentPane.add(comboBox);
 		
 		// Button Save
@@ -157,7 +169,7 @@ public class GUI_SORT extends JFrame {
 				filmMaster.save();
 			}
 		});
-		btnSave.setBounds(311, 292, 103, 25);
+		btnSave.setBounds(578, 293, 103, 27);
 		contentPane.add(btnSave);
 		
 		//SaveToCsv Button
@@ -171,7 +183,7 @@ public class GUI_SORT extends JFrame {
 			}
 		});
 
-		btnSaveToCsv.setBounds(314, 9, 103, 23);
+		btnSaveToCsv.setBounds(230, 328, 103, 23);
 		contentPane.add(btnSaveToCsv);
 		
 		//Rename Button
@@ -205,7 +217,7 @@ public class GUI_SORT extends JFrame {
 				}
 			}
 		});
-		btnRename.setBounds(314, 114, 103, 23);
+		btnRename.setBounds(300, 293, 103, 27);
 		contentPane.add(btnRename);
 		
 		// TechInfo Button
@@ -240,7 +252,7 @@ public class GUI_SORT extends JFrame {
 					"Information", JOptionPane.OK_CANCEL_OPTION);
 			}
 		});
-		btnInformation.setBounds(314, 78, 103, 23);
+		btnInformation.setBounds(116, 328, 103, 23);
 		contentPane.add(btnInformation);
 		
 		// Button GetXML
@@ -269,9 +281,10 @@ public class GUI_SORT extends JFrame {
 							lblTitel.setText("Titel: " +  filmMaster.gettitle());
 							lblGenre.setText("Genre: " +  filmMaster.getgenre());
 							lblPlot.setText("Plot: " +  filmMaster.getplot());
+							lblPic.setIcon(filmMaster.getpic()); // zeige Bild an
 						}
 						else {
-							lblTitel.setText("Titel: (Wurde nicht erkannt)");
+							lblTitel.setText("Titel: (Wurde nicht gefunden)");
 							lblGenre.setText("Genre: ?");
 							lblPlot.setText("Plot: ?");
 						}
@@ -287,7 +300,7 @@ public class GUI_SORT extends JFrame {
 				//JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
 			}
 		});
-		btnGetXML.setBounds(314, 42, 103, 23);
+		btnGetXML.setBounds(12, 328, 103, 23);
 		contentPane.add(btnGetXML);
 		
 		//Quit Button
@@ -300,8 +313,19 @@ public class GUI_SORT extends JFrame {
 				System.exit(0); 
 			}
 		});
-		btnQuit.setBounds(314, 150, 103, 23);
+		btnQuit.setBounds(600, 328, 103, 23);
 		contentPane.add(btnQuit);
+		
+		JButton button = new JButton("?");
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				String input = JOptionPane.showInputDialog("Geben sie den Suchbegriff oder die IMDB ID ein: ", null);
+				filmMaster.setQuery(input);
+			}
+		});
+		button.setBounds(524, 293, 48, 27);
+		contentPane.add(button);
 		
 		// File auswahl
         JFileChooser fc = new JFileChooser();

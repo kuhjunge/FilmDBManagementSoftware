@@ -1,8 +1,11 @@
 package sort;
 
+import java.awt.Image;
 import java.io.File;
+import java.net.URL;
 //import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class Movie {
@@ -114,7 +117,6 @@ public class Movie {
 	
 	private void taganalyse()
 	{
-		JOptionPane.showMessageDialog(null, oTag);
 		if (oTag.startsWith("tt"))
 		{
 			loadIMDB (oTag);
@@ -167,6 +169,19 @@ public class Movie {
 		saveplace = movieFile.getPath();
 	}
 	
+	public void setQuery(String input)
+	{
+		if (oTag.startsWith("tt"))
+		{
+			loadIMDB (oTag);
+			lockID = true;
+		}
+		else 
+		{
+			loadNamefromInsert(input);
+		}
+	}
+	
 	// Get Funktionen
 	public String gettitle ()
 	{
@@ -214,6 +229,28 @@ public class Movie {
 	public String getposters ()
 	{
 		return mPoster;
+	}
+	public ImageIcon getpic()
+	{
+		try 
+		{
+			ImageIcon ico = new ImageIcon(new URL(mPoster)); // Lade Bild aus Inet
+			if (ico.getIconWidth() <  ico.getIconHeight())
+			{
+				float factor = (float)ico.getIconWidth() / (float)ico.getIconHeight();
+				ico.setImage(ico.getImage().getScaledInstance((int)(150 * factor),150,Image.SCALE_DEFAULT)); // Skaliere
+			}
+			else 
+			{
+				float factor = ico.getIconHeight() / ico.getIconWidth();
+				ico.setImage(ico.getImage().getScaledInstance(150,(int)(150*factor),Image.SCALE_DEFAULT)); // Skaliere
+			}
+			 return ico;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 	public String getrating ()
 	{
