@@ -83,7 +83,7 @@ public class GUI_SORT extends JFrame {
 		setTitle("Komplexe Erstellung einer Filmliste!");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 720, 332);
+		setBounds(100, 100, 720, 348);
 		contentPaneTitel = new JPanel();
 		contentPaneTitel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPaneTitel);
@@ -110,7 +110,7 @@ public class GUI_SORT extends JFrame {
 		
 		// Scroll Panel
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 13, 276, 278);
+		scrollPane.setBounds(0, 0, 276, 313);
 		contentPaneTitel.add(scrollPane);
 		
 		// Label Titel
@@ -280,7 +280,7 @@ public class GUI_SORT extends JFrame {
 				 * */
 			}
 		});
-		btnGetXML.setBounds(296, 268, 103, 23);
+		btnGetXML.setBounds(280, 274, 103, 23);
 		contentPaneTitel.add(btnGetXML);
 		
 		//Quit Button
@@ -322,6 +322,10 @@ public class GUI_SORT extends JFrame {
 		});
 		button.setBounds(656, 209, 48, 27);
 		contentPaneTitel.add(button);
+		
+		JLabel lblByMerlin = new JLabel("V.0.1 \u00A9 2013 by SirGotcha & Kuhjunge");
+		lblByMerlin.setBounds(475, 297, 226, 16);
+		contentPaneTitel.add(lblByMerlin);
 		
 		// File auswahl
         JFileChooser fc = new JFileChooser();
