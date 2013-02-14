@@ -15,7 +15,7 @@ public class Movie {
 	private String saveplace = "";
 	private String foldername = "";
 	private String oTitle = "";
-	private String oQually = "";
+	private String oQually = "SQ";
 	private String oSize ="";
 	private String oType ="F";
 	
@@ -120,10 +120,10 @@ public class Movie {
 			if (splitFolder.length > 2)
 			{
 				String split = splitFolder[splitFolder.length - 3];
-				if(split == "SQ") oQually= "SQ";
-				else if(split == "720p") oQually= "720";
-				else if(split == "1080p") oQually= "1080";
-				else if(split == "LQ") oQually= "LQ";
+				if(split.contains("SQ")) oQually = "SQ";
+				else if(split.contains("720p")) oQually = "720";
+				else if(split.contains("1080p")) oQually = "1080";
+				else if(split.contains("LQ")) oQually = "LQ";
 			}
 		/*	if (splitFolder.length > 3)
 			{
@@ -131,6 +131,12 @@ public class Movie {
 				if (split == "Serie") ;
 			} */
 		}
+		File moviexml = new File(getpath() + "\\movie.xml");
+	    if(moviexml.exists()){
+	    	xmlConnect xml = new xmlConnect();
+	    	String tag = xml.readXML( getpath() +"\\movie.xml");
+	    	taganalyse( tag);
+	    }
 		oSize = getDirSize();
 	}
 	
@@ -161,7 +167,7 @@ public class Movie {
 	
 	private void taganalyse(String tag)
 	{
-		if (tag.startsWith("tt"))
+		if (tag != null && tag.startsWith("tt"))
 		{
 			loadIMDB (tag);
 			lockID = true;
@@ -220,6 +226,10 @@ public class Movie {
 	}
 	
 	// Get Funktionen
+	public String getpath()
+	{
+			return saveplace + "\\" + foldername;
+	}
 	public String gettitle ()
 	{
 		if (mTitle != null && mTitle != "")
@@ -227,6 +237,10 @@ public class Movie {
 			return mTitle;
 		}
 		else
+			return oTitle;
+	}
+	public String getotitle ()
+	{
 			return oTitle;
 	}
 	public String getyear ()
@@ -321,11 +335,13 @@ public class Movie {
 	}
 	public String getQually()
 	{
-		return oQually;
+		return  oQually;
 	}
 	public String getType()
 	{
-		return oType;
+		if (oType == "S")
+		return "Serie";
+		else return "Film";
 	}
 	private static String filesize(long groesse)
 	{
@@ -345,27 +361,25 @@ public class Movie {
 		else erg = " " + (groesse/1024/1024/1024)+ "GB \n";
 		return erg;
 	}
+	
 	//
-	
-	private void mrename(String title)
-	{
-		//Angeklickte Datei mit PFad auslesen
-        File f = new File(saveplace + "\\" + foldername);
-        //Rename Eingegebener neuer Titel
-		f.renameTo(new File(saveplace + "\\" + title));
-	}
-	
-	public void rename()
-	{
-		 mrename(JOptionPane.showInputDialog("Geben sie den neuen Dateinamen ein: ", foldername));
-	}
-	public void save()
+	public void save(String name,String typ,String qually)
 	{
 		if (oTitle != null)
 		{
-			String tag = "n";
-			if (mImdbID != "") tag = mImdbID;
-			mrename(oQually + "_" + tag + "_" + oTitle);
+			if (typ.startsWith("S")) typ = "S";
+			else typ ="F";
+			String titel  = typ + qually + "_"  + name;
+			oType = typ;
+			oTitle = name;
+			oQually = qually;
+			//Angeklickte Datei mit PFad auslesen
+	        File f = new File(saveplace + "\\" + foldername);
+	        //Rename Eingegebener neuer Titel
+			f.renameTo(new File(saveplace + "\\" + titel));
+			xmlConnect xml = new xmlConnect();
+			xml.saveToXML(saveplace + "\\" + titel + "\\" + "movie.xml" ,mImdbID );
+			
 		}
 	}
 }

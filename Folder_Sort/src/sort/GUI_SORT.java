@@ -1,26 +1,21 @@
 package sort;
 
 import java.awt.EventQueue;
-import java.awt.Image;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileFilter;
-import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import java.awt.event.ItemListener;
@@ -38,7 +33,7 @@ public class GUI_SORT extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPaneTitel;
 	final sort_class lib = new sort_class();
-	private JTextField textField;
+	private JTextField textFieldTitle;
 
 	/**
 	 * Launch the application.
@@ -88,7 +83,7 @@ public class GUI_SORT extends JFrame {
 		setTitle("Komplexe Erstellung einer Filmliste!");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 720, 354);
+		setBounds(100, 100, 720, 332);
 		contentPaneTitel = new JPanel();
 		contentPaneTitel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPaneTitel);
@@ -105,12 +100,12 @@ public class GUI_SORT extends JFrame {
 		
 		//LabelPic
 		final JLabel lblPic = new JLabel(" ");
-		lblPic.setBounds(552, 13, 150, 150);
+		lblPic.setBounds(551, 27, 150, 150);
 		contentPaneTitel.add(lblPic);
 		
 		// Label Titel
-		JLabel lblPfad = new JLabel("Pfad: ");
-		lblPfad.setBounds(300, 13, 221, 14);
+		final JLabel lblPfad = new JLabel("Pfad: ");
+		lblPfad.setBounds(300, 13, 401, 14);
 		contentPaneTitel.add(lblPfad);
 		
 		// Scroll Panel
@@ -130,19 +125,19 @@ public class GUI_SORT extends JFrame {
 		
 		// Label Plot
 		final JLabel lblPlot = new JLabel("Plot:");
-		lblPlot.setBounds(300, 169, 402, 14);
+		lblPlot.setBounds(300, 190, 402, 14);
 		contentPaneTitel.add(lblPlot);
 		
 		final JLabel lblJahr = new JLabel("Jahr: ");
-		lblJahr.setBounds(300, 94, 86, 16);
+		lblJahr.setBounds(300, 94, 140, 16);
 		contentPaneTitel.add(lblJahr);
 		
 		final JLabel lblLaufzeit = new JLabel("Laufzeit:");
-		lblLaufzeit.setBounds(300, 112, 103, 16);
+		lblLaufzeit.setBounds(300, 112, 202, 16);
 		contentPaneTitel.add(lblLaufzeit);
 		
 		final JLabel lblRating = new JLabel("Wertung: ");
-		lblRating.setBounds(300, 196, 103, 16);
+		lblRating.setBounds(300, 163, 126, 16);
 		contentPaneTitel.add(lblRating);
 		
 		final JLabel lblSchauspieler = new JLabel("Schauspieler:");
@@ -154,27 +149,27 @@ public class GUI_SORT extends JFrame {
 		contentPaneTitel.add(lblDirector);
 		
 		final JLabel lblGroesse = new JLabel("Gr\u00F6\u00DFe:");
-		lblGroesse.setBounds(300, 220, 106, 16);
+		lblGroesse.setBounds(300, 220, 126, 16);
 		contentPaneTitel.add(lblGroesse);
 		
-		JComboBox comboBoxTyp = new JComboBox();
-		comboBoxTyp.setModel(new DefaultComboBoxModel(new String[] {"Film", "Serie"}));
+		final JComboBox<String> comboBoxTyp = new JComboBox<String>();
+		comboBoxTyp.setModel(new DefaultComboBoxModel<String>(new String[] {"Film", "Serie"}));
 		comboBoxTyp.setBounds(300, 239, 57, 22);
 		contentPaneTitel.add(comboBoxTyp);
 		
-		JComboBox comboBoxQually = new JComboBox();
-		comboBoxQually.setModel(new DefaultComboBoxModel(new String[] {"4K", "3D", "1080", "720", "SQ", "LQ"}));
+		final JComboBox<String> comboBoxQually = new JComboBox<String>();
+		comboBoxQually.setModel(new DefaultComboBoxModel<String>(new String[] {"4K", "3D", "1080", "720", "SQ", "LQ"}));
 		comboBoxQually.setBounds(369, 239, 57, 22);
 		contentPaneTitel.add(comboBoxQually);
 		
-		textField = new JTextField();
-		textField.setBounds(438, 239, 157, 22);
-		contentPaneTitel.add(textField);
-		textField.setColumns(10);
+		textFieldTitle = new JTextField();
+		textFieldTitle.setBounds(438, 239, 157, 22);
+		contentPaneTitel.add(textFieldTitle);
+		textFieldTitle.setColumns(10);
 		
 		// Label IMDB Datensatz
 		JLabel lblImdbDatensatz = new JLabel("IMDB Datensatz:");
-		lblImdbDatensatz.setBounds(436, 201, 103, 16);
+		lblImdbDatensatz.setBounds(438, 214, 103, 16);
 		contentPaneTitel.add(lblImdbDatensatz);
 		
 		// Label Auswahl IMDB ID
@@ -182,18 +177,21 @@ public class GUI_SORT extends JFrame {
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				String data =(String) comboBox.getSelectedItem();
-				setInfo(data,  filmMaster, lblTitel,  lblGenre,  lblPlot,	 lblJahr,  lblLaufzeit,
-						lblRating, lblSchauspieler,  lblDirector,  lblGroesse, lblPic);
+				setInfo(data,  filmMaster, lblTitel,  lblGenre,  lblPlot,	 lblJahr,  lblLaufzeit,	lblRating, lblSchauspieler,  
+						lblDirector,  lblGroesse, lblPic,  comboBoxTyp,  comboBoxQually, textFieldTitle,lblPfad);
 			}
 		});
-		comboBox.setBounds(539, 196, 103, 27);
+		comboBox.setBounds(541, 209, 103, 27);
 		contentPaneTitel.add(comboBox);
 		
 		// Button Save
 		JButton btnSave = new JButton("speichern");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				filmMaster.save();
+				String name = textFieldTitle.getText();
+				String typ = comboBoxTyp.getSelectedItem().toString();
+				String qually = comboBoxQually.getSelectedItem().toString();
+				filmMaster.save(name, typ, qually);
 				listModel.clear();
 				//JList neu generieren
 				File f1 = new File(filmMaster.getFiledir());
@@ -210,7 +208,7 @@ public class GUI_SORT extends JFrame {
 				}
 			}
 		});
-		btnSave.setBounds(492, 268, 103, 23);
+		btnSave.setBounds(599, 239, 103, 23);
 		contentPaneTitel.add(btnSave);
 		
 		//SaveToCsv Button
@@ -224,42 +222,8 @@ public class GUI_SORT extends JFrame {
 			}
 		});
 
-		btnSaveToCsv.setBounds(300, 268, 103, 23);
+		btnSaveToCsv.setBounds(475, 268, 103, 23);
 		contentPaneTitel.add(btnSaveToCsv);
-		
-		//Rename Button
-		JButton btnRename = new JButton("Rename");
-		btnRename.addActionListener(new ActionListener() 
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				//Angeklickte Datei mit PFad auslesen
-		        File f2 = new File(filmMaster.getFiledir() + "\\" + list.getSelectedValue());
-		        //Eingabefeld
-		        String titel = JOptionPane.showInputDialog("Geben sie den neuen Dateinamen ein: ", list.getSelectedValue());
-		        //Rename Eingegebener neuer Titel
-				f2.renameTo(new File(filmMaster.getFiledir() + "\\" + titel));
-				//JList leeren
-				listModel.clear();
-				
-				//JList neu generieren
-				File f1 = new File(filmMaster.getFiledir());
-				File[] files = f1.listFiles();
-				if (files != null) 
-				{ // Erforderliche Berechtigungen etc. sind vorhanden
-					for (int i = 0; i < files.length; i++) 
-					{
-						if (files[i].isDirectory()) 
-						{
-							listModel.addElement(files[i].getName());
-						}
-					}
-				}
-			}
-		});
-		btnRename.setBounds(110, 295, 86, 23);
-		contentPaneTitel.add(btnRename);
 		
 		// Button GetXML
 		final JButton btnGetXML = new JButton("Info");
@@ -280,9 +244,9 @@ public class GUI_SORT extends JFrame {
 							imdbListModel.addElement(data.get(i));
 					}
 					if (!data.isEmpty())
-					setInfo(data.get(0),  filmMaster, lblTitel,  lblGenre,  lblPlot,	 lblJahr,  lblLaufzeit,
-							lblRating, lblSchauspieler,  lblDirector,  lblGroesse, lblPic);
-					else setInfoLite(filmMaster, lblTitel, lblGroesse);
+					setInfo(data.get(0),  filmMaster, lblTitel,  lblGenre,  lblPlot,	 lblJahr,  lblLaufzeit,	lblRating, 
+							lblSchauspieler,  lblDirector,  lblGroesse, lblPic,  comboBoxTyp,  comboBoxQually, textFieldTitle,lblPfad);
+					else setInfoLite(filmMaster, lblTitel, lblGroesse,  comboBoxTyp,  comboBoxQually, textFieldTitle,lblPfad);
 				}
 				//comboBox.add("test2", null);
 				//JOptionPane.showMessageDialog(null,mes,"Information", JOptionPane.OK_CANCEL_OPTION);
@@ -316,7 +280,7 @@ public class GUI_SORT extends JFrame {
 				 * */
 			}
 		});
-		btnGetXML.setBounds(599, 240, 103, 23);
+		btnGetXML.setBounds(296, 268, 103, 23);
 		contentPaneTitel.add(btnGetXML);
 		
 		//Quit Button
@@ -350,13 +314,13 @@ public class GUI_SORT extends JFrame {
 								imdbListModel.addElement(data.get(i));
 						}
 					if (!data.isEmpty())
-					setInfo(data.get(0),  filmMaster, lblTitel,  lblGenre,  lblPlot,	 lblJahr,  lblLaufzeit,
-							lblRating, lblSchauspieler,  lblDirector,  lblGroesse, lblPic);
+					setInfo(data.get(0),  filmMaster, lblTitel,  lblGenre,  lblPlot,	 lblJahr,  lblLaufzeit,	lblRating,
+							lblSchauspieler,  lblDirector,  lblGroesse, lblPic,  comboBoxTyp,  comboBoxQually, textFieldTitle,lblPfad);
 					//else setInfoLite(filmMaster, lblTitel, lblGroesse);
 				}
 			}
 		});
-		button.setBounds(654, 196, 48, 27);
+		button.setBounds(656, 209, 48, 27);
 		contentPaneTitel.add(button);
 		
 		// File auswahl
@@ -394,7 +358,8 @@ public class GUI_SORT extends JFrame {
 			JLabel lblTitel, JLabel lblGenre, JLabel lblPlot,
 			JLabel lblJahr, JLabel lblLaufzeit, JLabel lblRating,
 			JLabel lblSchauspieler, JLabel lblDirector, JLabel lblGroesse,
-			JLabel lblPic)
+			JLabel lblPic, JComboBox<String> comboBoxTyp, JComboBox<String> comboBoxQually,
+			JTextField textFieldTitle, JLabel lblPfad)
 	{
 		try 
 		{
@@ -408,7 +373,11 @@ public class GUI_SORT extends JFrame {
 				lblSchauspieler.setText("Schauspieler: " + filmMaster.getactors());
 				lblDirector.setText("Direktor: " + filmMaster.getdirector());
 				lblGroesse.setText("Größe: " + filmMaster.getSize());
+				comboBoxTyp.setSelectedItem(filmMaster.getType());
+				comboBoxQually.setSelectedItem(filmMaster.getQually());
 				lblPic.setIcon(filmMaster.getpic()); // zeige Bild an
+				textFieldTitle.setText(filmMaster.getotitle());
+				lblPfad.setText(filmMaster.getpath());
 			}
 			catch (Exception e)
 			{
@@ -421,12 +390,17 @@ public class GUI_SORT extends JFrame {
 				lblSchauspieler.setText("Schauspieler: ");
 				lblDirector.setText("Direktor: ");
 				lblGroesse.setText("Größe: ");
-				setInfoLite(filmMaster, lblTitel, lblGroesse);
+				setInfoLite(filmMaster, lblTitel, lblGroesse,  comboBoxTyp,  comboBoxQually, textFieldTitle,lblPfad);
 			}
 	}
-	public void setInfoLite( Movie filmMaster,JLabel lblTitel, JLabel lblGroesse)
+	public void setInfoLite( Movie filmMaster,JLabel lblTitel, JLabel lblGroesse, JComboBox<String> comboBoxTyp,
+			JComboBox<String> comboBoxQually, JTextField textFieldTitle, JLabel lblPfad)
 	{
 				lblTitel.setText("Titel: " +  filmMaster.gettitle());
 				lblGroesse.setText("Größe: " + filmMaster.getSize());
+				comboBoxTyp.setSelectedItem(filmMaster.getType());
+				comboBoxQually.setSelectedItem(filmMaster.getQually());
+				textFieldTitle.setText(filmMaster.getotitle());
+				lblPfad.setText(filmMaster.getpath());
 	}
 }

@@ -6,6 +6,7 @@
  * */
 
 package sort;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,6 +20,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
+import org.xml.sax.*;
+import org.w3c.dom.*;
 
 public class xmlConnect {
 	public ArrayList<String> getXml(String name) {
@@ -90,4 +97,122 @@ public class xmlConnect {
         }
    	 return erg;
     }
+	
+	public String readXML(String xml) {
+		ArrayList<String> rolev = new ArrayList<String>();
+		String id = null;
+        Document dom;
+        // Make an  instance of the DocumentBuilderFactory
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+            // use the factory to take an instance of the document builder
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            // parse using the builder to get the DOM mapping of the    
+            // XML file
+            dom = db.parse(xml);
+
+            Element doc = dom.getDocumentElement();
+            
+            id = getTextValue(id, doc, "id");
+            if (id != null) {
+                if (!id.isEmpty())
+                    rolev.add(id);
+            }
+            /*
+            role2 = getTextValue(role2, doc, "role2");
+            if (role2 != null) {
+                if (!role2.isEmpty())
+                    rolev.add(role2);
+            }
+            role3 = getTextValue(role3, doc, "role3");
+            if (role3 != null) {
+                if (!role3.isEmpty())
+                    rolev.add(role3);
+            }
+            role4 = getTextValue(role4, doc, "role4");
+            if ( role4 != null) {
+                if (!role4.isEmpty())
+                    rolev.add(role4);
+            }
+            */
+            return id;
+        } catch (Exception e) {           
+            e.printStackTrace();
+        }
+    /*    } catch (ParserConfigurationException pce) {
+            System.out.println(pce.getMessage());
+        } catch (SAXException se) {
+            System.out.println(se.getMessage());
+        } catch (IOException ioe) {
+            System.err.println(ioe.getMessage());
+        }*/
+
+        return null;
+    }
+	
+	public void saveToXML(String xml, String imdbid) {
+	    Document dom;
+	    Element e = null;
+
+	    // instance of a DocumentBuilderFactory
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    try {
+	        // use factory to get an instance of document builder
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+	        // create instance of DOM
+	        dom = db.newDocument();
+
+	        // create the root element
+	        Element rootEle = dom.createElement("movie");
+
+	        // create data elements and place them under root
+	        e = dom.createElement("id");
+	        e.appendChild(dom.createTextNode(imdbid));
+	        rootEle.appendChild(e);
+	       /*
+	        e = dom.createElement("role2");
+	        e.appendChild(dom.createTextNode(role2));
+	        rootEle.appendChild(e);
+
+	        e = dom.createElement("role3");
+	        e.appendChild(dom.createTextNode(role3));
+	        rootEle.appendChild(e);
+
+	        e = dom.createElement("role4");
+	        e.appendChild(dom.createTextNode(role4));
+	        rootEle.appendChild(e);*/
+
+	        dom.appendChild(rootEle);
+
+	        try {
+	            Transformer tr = TransformerFactory.newInstance().newTransformer();
+	            tr.setOutputProperty(OutputKeys.INDENT, "yes");
+	            tr.setOutputProperty(OutputKeys.METHOD, "xml");
+	            tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+	            //tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "movie.dtd");
+	            tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+	            // send DOM to file
+	            tr.transform(new DOMSource(dom), 
+	                                 new StreamResult(new FileOutputStream(xml)));
+
+	        } catch (TransformerException te) {
+	            System.out.println(te.getMessage());
+	        } catch (IOException ioe) {
+	            System.out.println(ioe.getMessage());
+	        }
+	    } catch (ParserConfigurationException pce) {
+	        System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);
+	    }
+	}
+	
+	private String getTextValue(String def, Element doc, String tag) {
+	    String value = def;
+	    NodeList nl;
+	    nl = doc.getElementsByTagName(tag);
+	    if (nl.getLength() > 0 && nl.item(0).hasChildNodes()) {
+	        value = nl.item(0).getFirstChild().getNodeValue();
+	    }
+	    return value;
+	}
 }
