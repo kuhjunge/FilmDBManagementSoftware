@@ -24,7 +24,9 @@ public class xmlConnect {
 	public ArrayList<String> getXml(String name) {
 		ArrayList<String> ret = new ArrayList<String>();
         try {
-        	String var = "s="+name.replace(" ", "%20");
+        	String var;
+        	if (name != null) var = "s="+name.replace(" ", "%20");
+        	else return null;
         	//String[] ret = null;
         	DocumentBuilderFactory dbc = DocumentBuilderFactory.newInstance();
             DocumentBuilder dbuilder;

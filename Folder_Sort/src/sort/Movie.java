@@ -16,8 +16,8 @@ public class Movie {
 	private String foldername = "";
 	private String oTitle = "";
 	private String oQually = "";
-	private String oTag = "";
 	private String oSize ="";
+	private String oType ="F";
 	
 	// IMDB Variablen
 	private String mTitle = "";
@@ -49,8 +49,8 @@ public class Movie {
 	{
 		 oTitle = "";
 		 oQually = "";
-		 oTag = "";
 		 oSize ="";
+		 oType ="F";
 		
 		// IMDB Variablen
 		 mTitle = "";
@@ -77,17 +77,61 @@ public class Movie {
 		clear(); // Leert das Filmobjekt
 		foldername = name;
 		String[] splitFolder = foldername.split("_",4);
-		// Ausgabe des Split STrings
+		// Titel extrahieren
 		if (splitFolder.length > 0)
 			oTitle = splitFolder[splitFolder.length - 1]; // Letzten Teil des Strings ausgeben
-		if (splitFolder.length > 1)
-			oTag = splitFolder[splitFolder.length - 2]; // Letzten Teil des Strings ausgeben
-		if (splitFolder.length > 2)
-			oQually = splitFolder[splitFolder.length - 3]; // Letzten Teil des Strings ausgeben
-		if (splitFolder.length > 3)
-			oQually = splitFolder[splitFolder.length - 4] +"_" + oQually  ; // Letzten Teil des Strings ausgebe
+		// rest extrahieren
+		if (splitFolder.length == 2)
+		{
+			String split = splitFolder[splitFolder.length - 2];
+			if (split.startsWith("S")) oType = "S";
+			else oType = "F";
+			switch (split.substring(1))
+			{
+				case "4k":
+					oQually= "4k";
+					break;
+				case "3D":
+					oQually= "3D";
+					break;
+				case "1080":
+					oQually= "1080";
+					break;
+				case "720":
+					oQually= "720";
+					break;
+				case "SQ":
+					oQually= "SQ";
+					break;
+				case "LQ":
+					oQually= "LQ";
+					break;
+			}
+		}
+		
+		// Alte analyse
+		else if (splitFolder.length > 2)
+		{
+			if (splitFolder.length > 1)
+			{
+				String oTag = splitFolder[splitFolder.length - 2]; // Letzten Teil des Strings ausgeben
+				taganalyse(oTag);
+			}
+			if (splitFolder.length > 2)
+			{
+				String split = splitFolder[splitFolder.length - 3];
+				if(split == "SQ") oQually= "SQ";
+				else if(split == "720p") oQually= "720";
+				else if(split == "1080p") oQually= "1080";
+				else if(split == "LQ") oQually= "LQ";
+			}
+		/*	if (splitFolder.length > 3)
+			{
+				String split = splitFolder[splitFolder.length - 4];
+				if (split == "Serie") ;
+			} */
+		}
 		oSize = getDirSize();
-		taganalyse();
 	}
 	
 	// Läd Filmdaten von der IMDB
@@ -115,11 +159,11 @@ public class Movie {
 		}
 	}
 	
-	private void taganalyse()
+	private void taganalyse(String tag)
 	{
-		if (oTag.startsWith("tt"))
+		if (tag.startsWith("tt"))
 		{
-			loadIMDB (oTag);
+			loadIMDB (tag);
 			lockID = true;
 		}
 	}
@@ -169,24 +213,19 @@ public class Movie {
 		saveplace = movieFile.getPath();
 	}
 	
-	public void setQuery(String input)
+	public boolean setQuery(String input)
 	{
-		if (oTag.startsWith("tt"))
-		{
-			loadIMDB (oTag);
-			lockID = true;
-		}
-		else 
-		{
-			oTitle = input;
-		}
+		taganalyse(input);
+		return lockID;
 	}
 	
 	// Get Funktionen
 	public String gettitle ()
 	{
-		if (mTitle != "")
+		if (mTitle != null && mTitle != "")
+		{
 			return mTitle;
+		}
 		else
 			return oTitle;
 	}
@@ -284,9 +323,9 @@ public class Movie {
 	{
 		return oQually;
 	}
-	public String getTag()
+	public String getType()
 	{
-		return oTag;
+		return oType;
 	}
 	private static String filesize(long groesse)
 	{
@@ -322,9 +361,9 @@ public class Movie {
 	}
 	public void save()
 	{
-		if (oTitle != "")
+		if (oTitle != null)
 		{
-			String tag = oTag;
+			String tag = "n";
 			if (mImdbID != "") tag = mImdbID;
 			mrename(oQually + "_" + tag + "_" + oTitle);
 		}
