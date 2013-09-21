@@ -39,22 +39,23 @@ public class GUI_SORT extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) 
-{
-		EventQueue.invokeLater(new Runnable() 
 	{
-			public void run()
-			{
-				try 
+			EventQueue.invokeLater(new Runnable() 
+		{
+				public void run()
 				{
-					GUI_SORT frame = new GUI_SORT();
-					frame.setVisible(true);
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
+					try 
+					{
+						GUI_SORT frame = new GUI_SORT();
+						frame.setVisible(true);
+					} catch (Exception e) 
+					{
+						e.printStackTrace();
+					}
 				}
-			}
-	});
-}
+		});
+	}
+	/*
 	//Filter Anzahl MKV Dateien
 	public class FilterFilesmkv implements FileFilter { 
 		  public boolean accept(File file) { 
@@ -73,6 +74,7 @@ public class GUI_SORT extends JFrame {
 		     return !file.isDirectory() && (file.getName().endsWith (".srt") || file.getName().endsWith (".sub") || file.getName().endsWith (".idx") || file.getName().endsWith (".ssa") || file.getName().endsWith (".ass")); 
 		  } 
 		}
+	*/
 
 	/**
 	 * Create the frame.
@@ -323,9 +325,9 @@ public class GUI_SORT extends JFrame {
 		button.setBounds(656, 209, 48, 27);
 		contentPaneTitel.add(button);
 		
-		JLabel lblByMerlin = new JLabel("V.0.1 \u00A9 2013 by SirGotcha & Kuhjunge");
-		lblByMerlin.setBounds(475, 297, 226, 16);
-		contentPaneTitel.add(lblByMerlin);
+		JLabel lblBy = new JLabel("V.0.2 \u00A9 2013 by SirGotcha & Kuhjunge");
+		lblBy.setBounds(475, 297, 226, 16);
+		contentPaneTitel.add(lblBy);
 		
 		// File auswahl
         JFileChooser fc = new JFileChooser();

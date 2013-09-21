@@ -76,5 +76,45 @@ public class sort_class
 			} 	
 	}
 	
-	// Gibt die größe mit Einheit zurück
+	// Auswahldialog für Pfadauswahl
+	// File auswahl
+	
+	/**
+	* Löst den Select Folder Dialog aus - zurzeit ungenutzt
+	* @param ...
+	* @return nichts
+	*/
+	void selectFolder(Movie filmMaster, DefaultListModel<String> lm, JList <String> list, DefaultComboBoxModel<String> imdbListModel,
+			JList <String> imdbList,JComboBox<String> comboBox,JScrollPane scrollPane )
+	{
+	    JFileChooser fc = new JFileChooser();
+	    fc.setCurrentDirectory(new File("C:\\"));
+	    fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); //Nur Ordner auswählbar
+	    int returnVal = fc.showOpenDialog(null);
+	    final File f;
+	    if (returnVal == JFileChooser.APPROVE_OPTION) 	//Wenn gewählt, dann
+	    {
+			f = fc.getSelectedFile();	//Verzeichnis Holen
+			filmMaster.setFile(f);
+			final File f1 = new File(filmMaster.getFiledir());	//In File speichern
+	
+				//Jlist
+				File[] files = f1.listFiles();
+				if (files != null) 
+				{ // Erforderliche Berechtigungen etc. sind vorhanden
+					for (int i = 0; i < files.length; i++) 
+					{
+						if (files[i].isDirectory()) 
+						{
+							lm.addElement(files[i].getName());
+						}
+					}
+				}
+				scrollPane.setViewportView(list);
+				// add items to listModel...
+				imdbList.setModel(imdbListModel);
+				comboBox.setModel(imdbListModel);
+	    }
+	}
+	
 }

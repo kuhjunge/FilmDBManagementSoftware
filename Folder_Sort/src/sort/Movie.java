@@ -343,6 +343,12 @@ public class Movie {
 		return "Serie";
 		else return "Film";
 	}
+	
+	/**
+	* Gibt die Dateigröße zurück
+	* @param long groesse - Größenangabe
+	* @return String mit Größenangabe
+	*/
 	private static String filesize(long groesse)
 	{
 		String erg = "";
@@ -367,9 +373,7 @@ public class Movie {
 	{
 		if (oTitle != null)
 		{
-			if (typ.startsWith("S")) typ = "S";
-			else typ ="F";
-			String titel  = typ + qually + "_"  + name;
+			String titel  =  name;
 			oType = typ;
 			oTitle = name;
 			oQually = qually;
