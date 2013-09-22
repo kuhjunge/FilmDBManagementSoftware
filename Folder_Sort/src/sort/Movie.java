@@ -171,6 +171,10 @@ public class Movie {
 			loadIMDB (tag);
 			lockID = true;
 		}
+		else if (tag != null )
+		{
+			mTitle = tag;
+		}
 	}
 	
 	

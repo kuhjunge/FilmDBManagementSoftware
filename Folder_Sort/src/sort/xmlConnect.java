@@ -23,6 +23,7 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 
 public class xmlConnect {
+	
 	public ArrayList<String> getXml(String name) {
 		ArrayList<String> ret = new ArrayList<String>();
         try {

@@ -226,20 +226,7 @@ public class FilmManagerGUI {
 				String typ = comboBoxTyp.getSelectedItem().toString();
 				String qually = comboBoxQually.getSelectedItem().toString();
 				filmMaster.save(name, typ, qually);
-				listModel.clear();
-				//JList neu generieren
-				File f1 = new File(filmMaster.getFiledir());
-				File[] files = f1.listFiles();
-				if (files != null) 
-				{ // Erforderliche Berechtigungen etc. sind vorhanden
-					for (int i = 0; i < files.length; i++) 
-					{
-						if (files[i].isDirectory()) 
-						{
-							listModel.addElement(files[i].getName());
-						}
-					}
-				}
+				loadlist(filmMaster.getFile()); // Filmliste neu laden
 			}
 		});
 		btnSave.setBounds(611, 254, 103, 23);
@@ -338,6 +325,7 @@ public class FilmManagerGUI {
 	{
 		if (f != null)
 		{
+		listModel.clear();
 		filmMaster.setFile(f);
 		final File f1 = new File(filmMaster.getFiledir());	//In File speichern
 
