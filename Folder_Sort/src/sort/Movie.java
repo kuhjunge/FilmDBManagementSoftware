@@ -6,7 +6,6 @@ import java.net.URL;
 //import java.io.IOException;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 public class Movie {
 	
