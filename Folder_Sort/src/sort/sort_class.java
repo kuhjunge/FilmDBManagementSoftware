@@ -12,9 +12,13 @@ import javax.swing.*;
 //Cooperation von Chris und Merlin!!!
 public class sort_class
 {
-	static FileWriter writer;
+	static FileWriter writer; // Klassenverweis
 
-	// Schreibt eine CSV mit einer Filmliste in den ausgewählten Ordner
+	/**
+	* Schreibt eine CSV mit einer Filmliste in den ausgewählten Ordner
+	* @param  f - Speicherpfad (als File)
+	* @return -
+	*/
 	void writeCSV(File f)
 	{
 		try

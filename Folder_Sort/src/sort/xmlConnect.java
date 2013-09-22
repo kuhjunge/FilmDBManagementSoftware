@@ -24,6 +24,11 @@ import javax.xml.transform.stream.*;
 
 public class xmlConnect {
 	
+	/**
+	* getXml sucht mithilfe eines Suchbegriffes alle passenden Filme aus der IMDB und gibt sie als ArrayList<String> zurück
+	* @param name - String Suchbegriff
+	* @return ArrayList<String> mit Filmtiteln
+	*/
 	public ArrayList<String> getXml(String name) {
 		ArrayList<String> ret = new ArrayList<String>();
         try {
@@ -59,6 +64,11 @@ public class xmlConnect {
    	 return ret;
     }
 	
+	/**
+	* Läd anhand der übergebenen ID den entsprechenden IMDB Titel und zugehörige Informationen
+	* @param id - String mit IMDB ID
+	* @return Einenen Array mit Informationen des Filmes
+	*/
 	public String[] getMovieObject(String id) {
 		String[] erg = new String[14];
     	DocumentBuilderFactory dbc = DocumentBuilderFactory.newInstance();
@@ -94,6 +104,11 @@ public class xmlConnect {
    	 return erg;
     }
 	
+	/**
+	* Liest die XML Datei aus dem Verzeichnis des Filmes
+	* @param xml - Der Pfad der Datei
+	* @return IMDB ID
+	*/
 	public String readXML(String xml) {
 		ArrayList<String> rolev = new ArrayList<String>();
 		String id = null;
@@ -146,6 +161,11 @@ public class xmlConnect {
         return null;
     }
 	
+	/**
+	* Speichert eine XML Datei mit Filminformationen in den entsprechenden Ordner
+	* @param xml - Speicherpfad
+	* @param imdbid - Die ID des zu speichernden Films
+	*/
 	public void saveToXML(String xml, String imdbid) {
 	    Document dom;
 	    Element e = null;

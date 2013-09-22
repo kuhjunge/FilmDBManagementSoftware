@@ -4,7 +4,9 @@ import java.awt.EventQueue;
 
 public class FilmManagerMain {
 
-	 
+	/**
+	* Hauptmethode - wird automatisch ausgeführt und öffnet GUI
+	*/ 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		final FilmManagerGUI fmgui = new FilmManagerGUI();
@@ -23,7 +25,7 @@ public class FilmManagerMain {
 
 
 /**
-* Gibt das Objekt der ausgewählten Spielfigur zurück
-* @param id - Die ID der Figur
-* @return Das Objekt der Spielfigur
+* Beschreibung
+* @param variable
+* @return rückgabewert
 */

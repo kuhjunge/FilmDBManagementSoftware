@@ -38,12 +38,17 @@ public class Movie {
 	// Config Variablen
 	private boolean lockID = false;
 	
-	// Konstruktor
+	/**
+	* Konstruktor
+	*/
 	public Movie()
 	{
 		
 	}
 	
+	/**
+	* Leert das Objekt
+	*/
 	private void clear()
 	{
 		 oTitle = "";
