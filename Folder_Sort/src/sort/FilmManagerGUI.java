@@ -329,6 +329,11 @@ public class FilmManagerGUI {
 		
 	}
 	
+	/**
+	* Läd die Liste mit den Filmen
+	* @param der DateiPfad
+	* @return -
+	*/
 	private void loadlist(File f)
 	{
 		if (f != null)
@@ -377,6 +382,11 @@ public class FilmManagerGUI {
         return f;
 	}
 	
+	/**
+	* Setzt die Informationen 
+	* @param diverse
+	* @return -
+	*/
 	public void setInfo(String imdbid, Movie filmMaster,
 			JLabel lblTitel, JLabel lblGenre, JLabel lblPlot,
 			JLabel lblJahr, JLabel lblLaufzeit, JLabel lblRating,
@@ -416,6 +426,12 @@ public class FilmManagerGUI {
 				setInfoLite(filmMaster, lblTitel, lblGroesse,  comboBoxTyp,  comboBoxQually, textFieldTitle,lblPfad);
 			}
 	}
+	
+	/**
+	* Setzt die Basisinformationen
+	* @param diverser
+	* @return -
+	*/
 	public void setInfoLite( Movie filmMaster,JLabel lblTitel, JLabel lblGroesse, JComboBox<String> comboBoxTyp,
 			JComboBox<String> comboBoxQually, JTextField textFieldTitle, JLabel lblPfad)
 	{
